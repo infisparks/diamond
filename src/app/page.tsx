@@ -3,7 +3,6 @@
 import React, { useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { event as fbEvent, customEvent as fbCustomEvent, getPreservedQueryString } from "@/lib/fpixel";
-import { DiamondHeader } from "@/components/diamond/DiamondHeader";
 import { DiamondHero } from "@/components/diamond/DiamondHero";
 import { DiamondTrustMetrics } from "@/components/diamond/DiamondTrustMetrics";
 import { DiamondCollections, ProductItem } from "@/components/diamond/DiamondCollections";
@@ -199,9 +198,6 @@ export default function Home({
           onCountryChange={handleCountryChange}
         />
       </Suspense>
-
-      {/* Header */}
-      <DiamondHeader onBookClick={handleOpenBooking} />
 
       {/* Hero Section */}
       <DiamondHero

@@ -56,7 +56,7 @@ interface WhatsappWorkflowConfig {
   step3Meeting: StepConfig;
 }
 
-const SERVER_URL = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://self.infiplus.in").replace(/\/$/, "");
+const SERVER_URL = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://diamons.infiplus.in").replace(/\/$/, "");
 
 export default function WhatsappManagerPage() {
   const router = useRouter();

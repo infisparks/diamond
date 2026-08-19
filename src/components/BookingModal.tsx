@@ -439,7 +439,7 @@ export function BookingModal({
         campaign: activeCampaign.id,
       });
 
-      const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://self.infiplus.in").replace(/\/$/, "");
+      const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://diamons.infiplus.in").replace(/\/$/, "");
       fetch(`${serverUrl}/api/whatsapp/auto-send-welcome`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -489,7 +489,7 @@ export function BookingModal({
     );
 
     // Trigger automated WhatsApp survey completion message
-    const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://self.infiplus.in").replace(/\/$/, "");
+    const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://diamons.infiplus.in").replace(/\/$/, "");
     const cleanPhone = contactInfo.phone.replace(/\D/g, "");
     const fullPhoneNumber = `${contactInfo.countryCode}${cleanPhone}`;
 
@@ -589,7 +589,7 @@ export function BookingModal({
     );
 
     // Trigger automated WhatsApp meeting confirmation & founder alert on 9958399157
-    const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://self.infiplus.in").replace(/\/$/, "");
+    const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://diamons.infiplus.in").replace(/\/$/, "");
     const cleanPhone = contactInfo.phone.replace(/\D/g, "");
     const fullPhoneNumber = `${contactInfo.countryCode}${cleanPhone}`;
 

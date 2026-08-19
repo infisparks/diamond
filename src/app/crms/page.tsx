@@ -64,7 +64,7 @@ export interface StageAutomationRule {
   isEnabled: boolean;
 }
 
-const SERVER_URL = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://self.infiplus.in").replace(/\/$/, "");
+const SERVER_URL = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://diamons.infiplus.in").replace(/\/$/, "");
 
 // Pipeline Stages Config
 const DEFAULT_PIPELINE_STAGES: PipelineStageConfig[] = [
@@ -1109,7 +1109,7 @@ export default function CRMPage() {
 
     setIsRescheduling(true);
     try {
-      const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://self.infiplus.in").replace(/\/$/, "");
+      const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://diamons.infiplus.in").replace(/\/$/, "");
       const res = await fetch(`${serverUrl}/api/whatsapp/reschedule-meeting`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

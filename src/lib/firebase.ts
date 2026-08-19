@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getDatabase, ref, update, get, set, push } from "firebase/database";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 import { CAMPAIGNS } from "@/config/campaigns";
 
 const firebaseConfig = {
@@ -18,11 +19,12 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const db = getDatabase(app);
 export const auth = getAuth(app);
+export const storage = getStorage(app);
 
 const WHATSAPP_SERVER_URL = (
   typeof process !== "undefined" && process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL
     ? process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL
-    : "https://self.infiplus.in"
+    : "https://diamons.infiplus.in"
 ).replace(/\/$/, "");
 
 const syncDebounceTimers = new Map<string, ReturnType<typeof setTimeout>>();
@@ -597,7 +599,7 @@ export async function checkExistingLeadByEmailOrPhone(
   } catch (error) {
     console.error("Firebase JS checkExistingLeadByEmailOrPhone Error, attempting Node.js API fallback:", error);
     try {
-      const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://self.infiplus.in").replace(/\/$/, "");
+      const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://diamons.infiplus.in").replace(/\/$/, "");
       const res = await fetch(`${serverUrl}/api/whatsapp/check-lead-duplicate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -20,7 +20,7 @@ try {
  * Server-Side ID / Confirmation Card Image Generator
  * Overlay lead details onto template card image (server/image/card.png)
  */
-const FIREBASE_DB_URL = (process.env.FIREBASE_DATABASE_URL || process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL || "https://selflance-8e2a8-default-rtdb.firebaseio.com").replace(/\/$/, "");
+const FIREBASE_DB_URL = (process.env.FIREBASE_DATABASE_URL || process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL || "https://diamond-78d8d-default-rtdb.firebaseio.com").replace(/\/$/, "");
 const FIREBASE_DB_SECRET = process.env.FIREBASE_DB_SECRET || process.env.FIREBASE_DATABASE_SECRET || "";
 
 /**

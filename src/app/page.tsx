@@ -1,24 +1,23 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, Suspense } from "react";
+import React, { useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { event as fbEvent, customEvent as fbCustomEvent, getPreservedQueryString } from "@/lib/fpixel";
-import { SelflanceHeader } from "@/components/selflance/SelflanceHeader";
-import { SelflanceHero } from "@/components/selflance/SelflanceHero";
-import { GrowthBottleneckSection } from "@/components/selflance/GrowthBottleneckSection";
-import { GrowthPartnerSection } from "@/components/selflance/GrowthPartnerSection";
-import { WhatWeBuildSection } from "@/components/selflance/WhatWeBuildSection";
-import { PortfolioShowcaseSection } from "@/components/selflance/PortfolioShowcaseSection";
-import { SituationCheckSection } from "@/components/selflance/SituationCheckSection";
-import { TargetAudienceSection } from "@/components/selflance/TargetAudienceSection";
-import { DeliverablesSection } from "@/components/selflance/DeliverablesSection";
-import { WhyChooseUsSection } from "@/components/selflance/WhyChooseUsSection";
-import { DevelopmentProcessSection } from "@/components/selflance/DevelopmentProcessSection";
-import { BeforeYouBookSection } from "@/components/selflance/BeforeYouBookSection";
-import { SelflanceFinalCTA } from "@/components/selflance/SelflanceFinalCTA";
-import { StickyMobileCTA } from "@/components/StickyMobileCTA";
+import { DiamondHeader } from "@/components/diamond/DiamondHeader";
+import { DiamondHero } from "@/components/diamond/DiamondHero";
+import { DiamondTrustMetrics } from "@/components/diamond/DiamondTrustMetrics";
+import { DiamondCollections, ProductItem } from "@/components/diamond/DiamondCollections";
+import { DiamondComparison } from "@/components/diamond/DiamondComparison";
+import { DiamondWholesale } from "@/components/diamond/DiamondWholesale";
+import { DiamondProcess } from "@/components/diamond/DiamondProcess";
+import { DiamondReviews } from "@/components/diamond/DiamondReviews";
+import { DiamondLocation } from "@/components/diamond/DiamondLocation";
+import { DiamondFAQ } from "@/components/diamond/DiamondFAQ";
+import { DiamondFinalCTA } from "@/components/diamond/DiamondFinalCTA";
+import { DiamondFooter } from "@/components/diamond/DiamondFooter";
+import { DiamondQuickViewModal } from "@/components/diamond/DiamondQuickViewModal";
+import { DiamondStickyCTA } from "@/components/diamond/DiamondStickyCTA";
 import { BookingModal } from "@/components/BookingModal";
-import { VideoModal } from "@/components/VideoModal";
 
 function URLParamsHandler({
   onConfigureBooking,
@@ -35,7 +34,7 @@ function URLParamsHandler({
 }) {
   const searchParams = useSearchParams();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (typeof window === "undefined") return;
 
     const countryParam = (searchParams.get("c") || searchParams.get("country") || "").toLowerCase();
@@ -93,6 +92,9 @@ export default function Home({
   defaultOpen?: boolean;
 } = {}) {
   const [isUS, setIsUS] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
   const [bookingConfig, setBookingConfig] = useState<{
     isOpen: boolean;
     step: 1 | 2 | 3 | 4;
@@ -107,60 +109,39 @@ export default function Home({
     campaignName: null,
   });
 
-  const [videoModal, setVideoModal] = useState<{
-    isOpen: boolean;
-    title: string;
-    author: string;
-    embedId?: string;
-  }>({
-    isOpen: false,
-    title: "",
-    author: "",
-    embedId: undefined,
-  });
-
-  // Dispatch PageView via Node.js CAPI
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const serverUrl = (process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL || "https://diamons.infiplus.in").replace(/\/$/, "");
-    const params = new URLSearchParams(window.location.search);
-    const testCode = params.get("test_event_code") || params.get("fbtest") || undefined;
-
-    fetch(`${serverUrl}/api/whatsapp/capi-event`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        eventName: "PageView",
-        eventSourceUrl: window.location.href,
-        testEventCode: testCode,
-      }),
-    }).catch((err) => console.error("Async CAPI PageView trigger error:", err));
+  const showToast = useCallback((msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3200);
   }, []);
 
-  const handleOpenBooking = useCallback(() => {
-    if (typeof window !== "undefined") {
-      const preserved = getPreservedQueryString();
-      window.history.replaceState({}, "", window.location.pathname + preserved);
-    }
+  const handleOpenBooking = useCallback(
+    (source?: string) => {
+      if (typeof window !== "undefined") {
+        const preserved = getPreservedQueryString();
+        window.history.replaceState({}, "", window.location.pathname + preserved);
+      }
 
-    fbEvent("Lead", {
-      content_name: "CTA Button Click",
-      currency: isUS ? "USD" : "INR",
-      value: 0,
-    });
-    fbCustomEvent("ButtonClick", {
-      button_name: "Book Strategy Session CTA",
-    });
+      fbEvent("Lead", {
+        content_name: source || "CTA Button Click",
+        currency: isUS ? "USD" : "INR",
+        value: 0,
+      });
+      fbCustomEvent("ButtonClick", {
+        button_name: source || "Book Store Session CTA",
+      });
 
-    setBookingConfig({
-      isOpen: true,
-      step: 1,
-      leadId: null,
-      createdDate: null,
-      campaignName: null,
-    });
-  }, [isUS]);
+      setBookingConfig({
+        isOpen: true,
+        step: 1,
+        leadId: null,
+        createdDate: null,
+        campaignName: null,
+      });
+    },
+    [isUS]
+  );
 
   const handleCloseBooking = useCallback(() => {
     setBookingConfig({
@@ -200,27 +181,18 @@ export default function Home({
     setIsUS(usState);
   }, []);
 
-  const handleOpenVideo = useCallback(() => {
-    setVideoModal({
-      isOpen: true,
-      title: "Selflance Digital Growth Engine",
-      author: "Selflance Technology Team",
-      embedId: "Otgmq0_YlnQ",
-    });
-  }, []);
-
-  const handleCloseVideo = useCallback(() => {
-    setVideoModal({
-      isOpen: false,
-      title: "",
-      author: "",
-      embedId: undefined,
-    });
-  }, []);
+  const scrollToSection = (id: string) => {
+    if (typeof document !== "undefined") {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   return (
-    <div className="w-full text-white bg-[#0B1121] min-h-screen antialiased selection:bg-[#df7626] selection:text-white relative overflow-x-hidden">
-      {/* URL Parameter Direct Link & Country Handler */}
+    <div className="w-full text-slate-900 bg-slate-50 min-h-screen antialiased selection:bg-purple-600 selection:text-white relative overflow-x-hidden">
+      {/* URL Parameter & Country Handler */}
       <Suspense fallback={null}>
         <URLParamsHandler
           onConfigureBooking={handleConfigureBooking}
@@ -228,53 +200,56 @@ export default function Home({
         />
       </Suspense>
 
-      {/* Fixed Navigation Header with CTA */}
-      <SelflanceHeader onBookClick={handleOpenBooking} />
+      {/* Header */}
+      <DiamondHeader onBookClick={handleOpenBooking} />
 
-      {/* Section 1: Hero Section */}
-      <SelflanceHero
-        isUS={isUS}
+      {/* Hero Section */}
+      <DiamondHero
         onBookClick={handleOpenBooking}
-        onVideoClick={handleOpenVideo}
+        onExploreClick={() => scrollToSection("collections")}
       />
 
-      {/* Section 2: The Growth Bottleneck */}
-      <GrowthBottleneckSection isUS={isUS} />
+      {/* Trust & Social Proof Strip */}
+      <DiamondTrustMetrics />
 
-      {/* Section 3: Technology Growth Partner / Our Philosophy */}
-      <GrowthPartnerSection isUS={isUS} />
+      {/* Collections Catalogue */}
+      <DiamondCollections onSelectProduct={(prod) => setSelectedProduct(prod)} />
 
-      {/* Section 4: What We Build */}
-      <WhatWeBuildSection />
+      {/* Market Problem vs Diamond Boutique Standard */}
+      <DiamondComparison />
 
-      {/* Section 4.5: Featured Portfolio & Design Showcase */}
-      <PortfolioShowcaseSection />
+      {/* Wholesale Portal & Margin Calculator */}
+      <DiamondWholesale onBookClick={handleOpenBooking} />
 
-      {/* Section 5: Company Situation Check */}
-      <SituationCheckSection isUS={isUS} />
+      {/* 4-Step Process */}
+      <DiamondProcess />
 
-      {/* Section 6: Target Audience Fit */}
-      <TargetAudienceSection isUS={isUS} />
+      {/* Customer Reviews */}
+      <DiamondReviews />
 
-      {/* Section 7: Strategy Session Deliverables */}
-      <DeliverablesSection isUS={isUS} />
+      {/* Physical Store Location */}
+      <DiamondLocation onBookClick={handleOpenBooking} onShowToast={showToast} />
 
-      {/* Section 8: Why Businesses Choose Selflance */}
-      <WhyChooseUsSection isUS={isUS} />
+      {/* FAQ Accordion */}
+      <DiamondFAQ />
 
-      {/* Section 9: Our Development Process */}
-      <DevelopmentProcessSection />
+      {/* Final Call to Action */}
+      <DiamondFinalCTA onBookClick={handleOpenBooking} />
 
-      {/* Section 10: Before You Book Notice */}
-      <BeforeYouBookSection isUS={isUS} />
+      {/* Footer */}
+      <DiamondFooter />
 
-      {/* Section 11: Final CTA Banner & Footer */}
-      <SelflanceFinalCTA isUS={isUS} onBookClick={handleOpenBooking} />
+      {/* Sticky Mobile Bar & Floating WhatsApp Button */}
+      <DiamondStickyCTA onBookClick={handleOpenBooking} />
 
-      {/* Fixed Floating CTA Bar (Appears upon scroll) */}
-      <StickyMobileCTA onBookClick={handleOpenBooking} />
+      {/* Full Dress Quick View Modal */}
+      <DiamondQuickViewModal
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        onBookTrial={(productName) => handleOpenBooking(`Trial for ${productName}`)}
+      />
 
-      {/* Booking Modal */}
+      {/* Multi-Step Booking & Consultation Modal */}
       <BookingModal
         isOpen={bookingConfig.isOpen}
         onClose={handleCloseBooking}
@@ -284,15 +259,13 @@ export default function Home({
         campaignName={bookingConfig.campaignName || "selflance"}
       />
 
-      {/* Video Modal */}
-      <VideoModal
-        isOpen={videoModal.isOpen}
-        onClose={handleCloseVideo}
-        title={videoModal.title}
-        author={videoModal.author}
-        embedId={videoModal.embedId}
-        onBookClick={handleOpenBooking}
-      />
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white px-5 py-3 rounded-full text-xs font-bold shadow-2xl border border-purple-400/40 z-50 flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-200">
+          <i className="fa-solid fa-circle-check text-amber-400"></i>
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 }

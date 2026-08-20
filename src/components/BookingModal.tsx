@@ -13,6 +13,12 @@ import {
 import { getCampaignConfig, DEFAULT_CAMPAIGN_ID } from "@/config/campaigns";
 import { event as fbEvent, customEvent as fbCustomEvent, getPreservedQueryString } from "@/lib/fpixel";
 
+const SERVER_URL = (
+  typeof process !== "undefined" && process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL
+    ? process.env.NEXT_PUBLIC_WHATSAPP_SERVER_URL
+    : "https://diamons.infiplus.in"
+).replace(/\/$/, "");
+
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -427,6 +433,18 @@ export function BookingModal({
         }
       }
 
+      // Auto-send WhatsApp Step 1 Welcome message
+      fetch(`${SERVER_URL}/api/whatsapp/auto-send-welcome`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: contactInfo.fullName,
+          email: contactInfo.email,
+          phone: cleanPhone,
+          campaignName: activeCampaign.id,
+        }),
+      }).catch((err) => console.error("Async WA Step 1 error:", err));
+
       setStep(2);
 
       fbEvent("Lead", {
@@ -476,6 +494,18 @@ export function BookingModal({
     saveOrUpdateLead(surveyPayload, emailPrefixId, createdDate, activeCampaign.id).catch((err) =>
       console.error("Async survey save error:", err)
     );
+
+    // Auto-send WhatsApp Step 2 Survey Completed message
+    fetch(`${SERVER_URL}/api/whatsapp/auto-send-survey`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fullName: contactInfo.fullName,
+        email: contactInfo.email,
+        phone: contactInfo.phone.replace(/\D/g, ""),
+        campaignName: activeCampaign.id,
+      }),
+    }).catch((err) => console.error("Async WA Step 2 error:", err));
   };
 
   const handleReset = () => {
@@ -561,6 +591,20 @@ export function BookingModal({
     saveOrUpdateLead(meetingPayload, emailPrefixId, createdDate, activeCampaign.id).catch((err) =>
       console.error("Async meeting save error:", err)
     );
+
+    // Auto-send WhatsApp Step 3 Meeting Confirmation message
+    fetch(`${SERVER_URL}/api/whatsapp/auto-send-meeting`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fullName: contactInfo.fullName,
+        email: contactInfo.email,
+        phone: contactInfo.phone.replace(/\D/g, ""),
+        date: appointmentDateStr,
+        time: timeSlot,
+        campaignName: activeCampaign.id,
+      }),
+    }).catch((err) => console.error("Async WA Step 3 error:", err));
   };
 
   const whatsappMessage = `Hi Diamond Boutique, I just booked a store consultation / visit.\nName: ${contactInfo.fullName || "Customer"}\nEmail: ${contactInfo.email || "N/A"}\nPhone: ${contactInfo.countryCode} ${contactInfo.phone || "N/A"}\nBooked Slot: ${formattedBookingDate} at ${selectedTimeSlot || "02:00 PM"}`;

@@ -423,8 +423,43 @@ async function _executeSyncLeadAutomationsInternal(leadData, previousStage, prev
       }
     }
 
-    // Fetch active rules from RTDB
-    const allStageRulesObj = (await firebaseDb("whatsapp_stage_automations/firstoptionagency")) || {};
+    // 1. Automatic Instant Workflow Message Dispatch (Step 1 Welcome / Step 2 Survey / Step 3 Meeting)
+    try {
+      const { sendWorkflowStepMessage } = require("./whatsapp");
+      if (typeof sendWorkflowStepMessage === "function") {
+        let targetStep = 0;
+        if (currentNorm === "inprogress" || currentNorm === "1stconnection" || currentNorm === "raw" || currentNorm === "partial") {
+          targetStep = 1;
+        } else if (currentNorm === "surveycompleted" || currentNorm === "survey" || currentNorm === "step2") {
+          targetStep = 2;
+        } else if (currentNorm === "meetingbooked" || currentNorm === "meeting" || currentNorm === "completed" || currentNorm === "booked" || currentNorm === "step3") {
+          targetStep = 3;
+        }
+
+        if (targetStep > 0) {
+          sendWorkflowStepMessage({
+            step: targetStep,
+            fullName: leadData.fullName || cleanPhone,
+            email: leadData.email || "",
+            phone: cleanPhone,
+            date: currentMeetingDate,
+            time: currentMeetingTime,
+            meetingUrl: leadData.meeting?.meetingUrl || null,
+            campaignName: leadData.campaign || "firstoptionagency",
+          }).catch((err) => console.error("[SyncLead Step WA Dispatch Error]:", err));
+        }
+      }
+    } catch (wErr) {
+      console.error("[SyncLead WA Workflow Error]:", wErr);
+    }
+
+    // Fetch active rules from RTDB (checking both campaign and fallback)
+    const targetCampaign = leadData.campaign || "firstoptionagency";
+    let allStageRulesObj = (await firebaseDb(`whatsapp_stage_automations/${targetCampaign}`)) || {};
+    if (Object.keys(allStageRulesObj).length === 0) {
+      allStageRulesObj = (await firebaseDb("whatsapp_stage_automations/firstoptionagency")) || (await firebaseDb("whatsapp_stage_automations/diamond")) || {};
+    }
+
     const activeRules = [];
     for (const [sId, rulesMap] of Object.entries(allStageRulesObj)) {
       if (!rulesMap || typeof rulesMap !== "object") continue;
@@ -459,7 +494,7 @@ async function _executeSyncLeadAutomationsInternal(leadData, previousStage, prev
     }
 
     // Resolve Default WhatsApp Instance
-    const config = (await firebaseDb("whatsapp_configuration/firstoptionagency")) || {};
+    const config = (await firebaseDb(`whatsapp_configuration/${targetCampaign}`)) || (await firebaseDb("whatsapp_configuration/diamond")) || (await firebaseDb("whatsapp_configuration/firstoptionagency")) || {};
     let defaultInstanceName = config.selectedInstanceName;
     if (!defaultInstanceName) {
       const fbInstances = (await firebaseDb("whatsapp_unofficial_instances")) || {};
@@ -467,6 +502,7 @@ async function _executeSyncLeadAutomationsInternal(leadData, previousStage, prev
       const openInst = instancesList.find((i) => i.status === "open") || instancesList[0];
       if (openInst) defaultInstanceName = openInst.instanceName;
     }
+    if (!defaultInstanceName) defaultInstanceName = "diamond";
 
     const currentEquivs = stageEquivalents[currentNorm] || [currentNorm];
 
@@ -477,9 +513,8 @@ async function _executeSyncLeadAutomationsInternal(leadData, previousStage, prev
       return rEquivs.some((eq) => currentEquivs.includes(eq)) || (rStgNorm && currentNorm && rStgNorm === currentNorm);
     });
 
-    // Auto Funnel Fallback Engine removed to ensure ONLY user-configured rules schedule messages
     if (matchingRules.length === 0) {
-      console.log(`[Cloud Tasks ℹ️] No configured rules for stage '${currentStage}'. Skipping automation scheduling.`);
+      console.log(`[Cloud Tasks ℹ️] No configured rules for stage '${currentStage}'. Workflow auto-send dispatched.`);
       return { success: true, count: 0, tasks: [] };
     }
 

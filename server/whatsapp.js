@@ -613,18 +613,37 @@ router.delete("/instance/delete/:instanceId", async (req, res) => {
 });
 
 /**
+ * Helper to get Workflow Config from Firebase with cross-campaign fallback
+ */
+async function getWorkflowConfig(campaignName = "firstoptionagency") {
+  try {
+    let config = (await firebaseDb(`whatsapp_configuration/${campaignName}`)) || {};
+    if (!config.step1Welcome && !config.selectedInstanceName) {
+      const diamondConfig = (await firebaseDb("whatsapp_configuration/diamond")) || {};
+      const firstOptionConfig = (await firebaseDb("whatsapp_configuration/firstoptionagency")) || {};
+      config = { ...firstOptionConfig, ...diamondConfig, ...config };
+    }
+    return config || {};
+  } catch (e) {
+    console.error("getWorkflowConfig error:", e);
+    return {};
+  }
+}
+
+/**
  * 9. Get WhatsApp Lead Workflow Configuration (Step 1 Contact, Step 2 Survey, Step 3 Meeting)
  * GET /api/whatsapp/config
  */
 router.get("/config", async (req, res) => {
   try {
-    const config = (await firebaseDb("whatsapp_configuration/firstoptionagency")) || {};
+    const campaign = req.query.campaign || "firstoptionagency";
+    const config = (await getWorkflowConfig(campaign)) || {};
     const defaultConfig = {
-      selectedInstanceName: config.selectedInstanceName || "",
+      selectedInstanceName: config.selectedInstanceName || "diamond",
       defaultMeetingUrl: config.defaultMeetingUrl || "https://meet.google.com/firstoption-strategy-call",
       step1Welcome: {
         isEnabled: config.step1Welcome?.isEnabled !== undefined ? config.step1Welcome.isEnabled : (config.isEnabled !== undefined ? config.isEnabled : true),
-        template: config.step1Welcome?.template || config.welcomeMessageTemplate || "Hello {{name}}, thank you for contacting First Option Agency! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.",
+        template: config.step1Welcome?.template || config.welcomeMessageTemplate || "Hello {{name}}, thank you for contacting DIAMOND BOUTIQUE! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.",
       },
       step2Survey: {
         isEnabled: config.step2Survey?.isEnabled !== undefined ? config.step2Survey.isEnabled : true,
@@ -632,7 +651,7 @@ router.get("/config", async (req, res) => {
       },
       step3Meeting: {
         isEnabled: config.step3Meeting?.isEnabled !== undefined ? config.step3Meeting.isEnabled : true,
-        template: config.step3Meeting?.template || "🎉 Meeting Confirmed! Hello {{name}}, your strategy session with First Option Agency is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}",
+        template: config.step3Meeting?.template || "🎉 Meeting Confirmed! Hello {{name}}, your consultation with Diamond Boutique is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}",
       },
     };
     return res.status(200).json({ success: true, data: defaultConfig });
@@ -648,13 +667,13 @@ router.get("/config", async (req, res) => {
  */
 router.post("/config", async (req, res) => {
   try {
-    const { selectedInstanceName, defaultMeetingUrl, step1Welcome, step2Survey, step3Meeting } = req.body;
+    const { selectedInstanceName, defaultMeetingUrl, step1Welcome, step2Survey, step3Meeting, campaignName = "firstoptionagency" } = req.body;
     const configPayload = {
-      selectedInstanceName: selectedInstanceName || "",
+      selectedInstanceName: selectedInstanceName || "diamond",
       defaultMeetingUrl: defaultMeetingUrl || "https://meet.google.com/firstoption-strategy-call",
       step1Welcome: {
         isEnabled: step1Welcome?.isEnabled !== false,
-        template: step1Welcome?.template || "Hello {{name}}, thank you for contacting First Option Agency! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.",
+        template: step1Welcome?.template || "Hello {{name}}, thank you for contacting DIAMOND BOUTIQUE! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.",
       },
       step2Survey: {
         isEnabled: step2Survey?.isEnabled !== false,
@@ -662,11 +681,13 @@ router.post("/config", async (req, res) => {
       },
       step3Meeting: {
         isEnabled: step3Meeting?.isEnabled !== false,
-        template: step3Meeting?.template || "🎉 Meeting Confirmed! Hello {{name}}, your strategy session with First Option Agency is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}",
+        template: step3Meeting?.template || "🎉 Meeting Confirmed! Hello {{name}}, your consultation with Diamond Boutique is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}",
       },
       updatedAt: new Date().toISOString(),
     };
 
+    await firebaseDb(`whatsapp_configuration/${campaignName}`, "PUT", configPayload);
+    await firebaseDb("whatsapp_configuration/diamond", "PUT", configPayload);
     await firebaseDb("whatsapp_configuration/firstoptionagency", "PUT", configPayload);
 
     return res.status(200).json({
@@ -975,11 +996,132 @@ router.post("/notify-founders", async (req, res) => {
  * Helper to resolve active instance name
  */
 async function resolveActiveInstance(preferredInstance) {
-  if (preferredInstance) return preferredInstance;
-  const fbInstances = (await firebaseDb("whatsapp_unofficial_instances")) || {};
-  const instancesList = Object.values(fbInstances).filter(Boolean);
-  const openInst = instancesList.find((i) => i.status === "open") || instancesList[0];
-  return openInst ? openInst.instanceName : null;
+  try {
+    const fbInstances = (await firebaseDb("whatsapp_unofficial_instances")) || {};
+    const instancesList = Object.values(fbInstances).filter(Boolean);
+
+    if (preferredInstance && fbInstances[preferredInstance]) {
+      const p = fbInstances[preferredInstance];
+      if (p.status === "open" || instancesList.length === 0 || !instancesList.some((i) => i && i.status === "open")) {
+        return p.instanceName || preferredInstance;
+      }
+    }
+
+    const openInst = instancesList.find((i) => i && i.status === "open") || instancesList[0];
+    if (openInst) return openInst.instanceName || openInst.instanceId;
+    return preferredInstance || "diamond";
+  } catch (err) {
+    return preferredInstance || "diamond";
+  }
+}
+
+/**
+ * Modular Helper: Dispatches Step 1 Welcome, Step 2 Survey, or Step 3 Meeting WhatsApp Message
+ */
+async function sendWorkflowStepMessage({
+  step,
+  fullName,
+  email,
+  phone,
+  date,
+  time,
+  meetingUrl,
+  campaignName = "firstoptionagency",
+}) {
+  try {
+    if (!phone) return { success: false, error: "Phone number required" };
+    const cleanNumber = sanitizePhoneNumber(phone);
+    if (!cleanNumber || cleanNumber.length < 5) return { success: false, error: "Invalid phone number" };
+
+    const config = await getWorkflowConfig(campaignName);
+    const instanceName = await resolveActiveInstance(config.selectedInstanceName);
+    if (!instanceName) {
+      console.warn(`[Workflow WA] No WhatsApp instance found for ${cleanNumber}`);
+      return { success: false, error: "No active WhatsApp instance available" };
+    }
+
+    let stepConfig = null;
+    let defaultTemplate = "";
+    let msgType = "";
+
+    if (step === 1 || step === "step1" || step === "welcome") {
+      stepConfig = config.step1Welcome || { isEnabled: true };
+      defaultTemplate = "Hello {{name}}, thank you for contacting DIAMOND BOUTIQUE! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.";
+      msgType = "auto_welcome";
+    } else if (step === 2 || step === "step2" || step === "survey") {
+      stepConfig = config.step2Survey || { isEnabled: true };
+      defaultTemplate = "Hello {{name}}, thank you for completing our qualification survey! Your answers have been recorded. Proceed to select a meeting time slot to complete your booking.";
+      msgType = "auto_survey";
+    } else if (step === 3 || step === "step3" || step === "meeting") {
+      stepConfig = config.step3Meeting || { isEnabled: true };
+      defaultTemplate = "🎉 Meeting Confirmed! Hello {{name}}, your consultation with Diamond Boutique is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}";
+      msgType = "auto_meeting";
+    }
+
+    if (!stepConfig || stepConfig.isEnabled === false) {
+      return { success: false, disabled: true, message: `Step ${step} message disabled in settings.` };
+    }
+
+    // Idempotency: Avoid rapid duplicate sends within 20s
+    const idempotencyKey = `wf_${cleanNumber}_step_${step}`;
+    const sentRecord = await firebaseDb(`whatsapp_sent_automations/${idempotencyKey}`);
+    const nowMs = Date.now();
+    if (sentRecord && sentRecord.sentAt) {
+      const sentMs = new Date(sentRecord.sentAt).getTime();
+      if (nowMs - sentMs < 20000) {
+        console.log(`[Workflow WA 🛡️] Duplicate suppression: Step ${step} message already sent to ${cleanNumber} ${Math.round((nowMs - sentMs) / 1000)}s ago.`);
+        return { success: true, duplicate: true };
+      }
+    }
+
+    let rawTemplate = stepConfig.template || defaultTemplate;
+    const resolvedMeetingUrl = meetingUrl || config.defaultMeetingUrl || "https://meet.google.com/firstoption-strategy-call";
+
+    const formattedMessage = rawTemplate
+      .replace(/\{\{\s*name\s*\}\}/gi, fullName || "Valued Client")
+      .replace(/\{\{\s*email\s*\}\}/gi, email || "N/A")
+      .replace(/\{\{\s*phone\s*\}\}/gi, phone || "N/A")
+      .replace(/\{\{\s*date\s*\}\}/gi, date || "Upcoming Date")
+      .replace(/\{\{\s*time\s*\}\}/gi, time || "Scheduled Time")
+      .replace(/\{\{\s*meeting_url\s*\}\}/gi, resolvedMeetingUrl)
+      .replace(/\{\{\s*meeting_link\s*\}\}/gi, resolvedMeetingUrl)
+      .replace(/\{\{\s*link\s*\}\}/gi, resolvedMeetingUrl);
+
+    console.log(`💬 [Workflow WA] Dispatching Step ${step} message to ${cleanNumber} via instance '${instanceName}'...`);
+    const evoRes = await evoApiCall(`/message/sendText/${instanceName}`, "POST", {
+      number: cleanNumber,
+      text: formattedMessage,
+    });
+
+    if (evoRes.ok) {
+      await firebaseDb(`whatsapp_unofficial_instances/${instanceName}`, "PATCH", {
+        status: "open",
+        qrCode: null,
+        updatedAt: new Date().toISOString(),
+      });
+      const logId = `${msgType}_${Date.now()}`;
+      await firebaseDb(`whatsapp_logs/${instanceName}/${logId}`, "PUT", {
+        id: logId,
+        type: msgType,
+        number: cleanNumber,
+        text: formattedMessage,
+        status: "sent",
+        timestamp: new Date().toISOString(),
+      });
+      await firebaseDb(`whatsapp_sent_automations/${idempotencyKey}`, "PUT", {
+        status: "sent",
+        sentAt: new Date().toISOString(),
+        instanceName,
+      });
+    } else {
+      console.error(`❌ [Workflow WA] Evolution API send failed for ${cleanNumber}:`, evoRes.data);
+    }
+
+    return { success: evoRes.ok, message: evoRes.ok ? "Message sent" : "Send failed", data: evoRes.data, meetingUrl: resolvedMeetingUrl };
+  } catch (err) {
+    console.error("[sendWorkflowStepMessage Exception]:", err);
+    return { success: false, error: err.message };
+  }
 }
 
 /**
@@ -988,7 +1130,7 @@ async function resolveActiveInstance(preferredInstance) {
  */
 router.post("/auto-send-welcome", async (req, res) => {
   try {
-    const { fullName, email, phone } = req.body;
+    const { fullName, email, phone, campaignName = "firstoptionagency" } = req.body;
     if (!phone) return res.status(400).json({ success: false, error: "Phone number is required" });
 
     // Asynchronously trigger Meta WhatsApp Cloud API notification to all Founders (non-blocking)
@@ -996,32 +1138,15 @@ router.post("/auto-send-welcome", async (req, res) => {
       console.error("Async Founder Notification Exception:", err)
     );
 
-    const config = (await firebaseDb("whatsapp_configuration/firstoptionagency")) || {};
-    const stepConfig = config.step1Welcome || { isEnabled: config.isEnabled !== false, template: config.welcomeMessageTemplate };
+    const result = await sendWorkflowStepMessage({
+      step: 1,
+      fullName,
+      email,
+      phone,
+      campaignName,
+    });
 
-    if (stepConfig.isEnabled === false) {
-      return res.status(200).json({ success: false, disabled: true, message: "Step 1 WhatsApp welcome is disabled." });
-    }
-
-    const instanceName = await resolveActiveInstance(config.selectedInstanceName);
-    if (!instanceName) return res.status(400).json({ success: false, error: "No active WhatsApp instance available." });
-
-    let rawTemplate = stepConfig.template || "Hello {{name}}, thank you for contacting First Option Agency! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.";
-    const formattedMessage = rawTemplate
-      .replace(/\{\{\s*name\s*\}\}/gi, fullName || "Valued Client")
-      .replace(/\{\{\s*email\s*\}\}/gi, email || "N/A")
-      .replace(/\{\{\s*phone\s*\}\}/gi, phone || "N/A");
-
-    const cleanNumber = sanitizePhoneNumber(phone);
-    const evoRes = await evoApiCall(`/message/sendText/${instanceName}`, "POST", { number: cleanNumber, text: formattedMessage });
-
-    if (evoRes.ok) {
-      await firebaseDb(`whatsapp_unofficial_instances/${instanceName}`, "PATCH", { status: "open", qrCode: null, updatedAt: new Date().toISOString() });
-      const logId = `auto_welcome_${Date.now()}`;
-      await firebaseDb(`whatsapp_logs/${instanceName}/${logId}`, "PUT", { id: logId, type: "auto_welcome", number: cleanNumber, text: formattedMessage, status: "sent", timestamp: new Date().toISOString() });
-    }
-
-    return res.status(200).json({ success: evoRes.ok, message: evoRes.ok ? "Welcome message sent" : "Send failed", data: evoRes.data });
+    return res.status(200).json(result);
   } catch (err) {
     console.error("Auto Send Welcome Exception:", err);
     return res.status(500).json({ success: false, error: err.message });
@@ -1034,58 +1159,39 @@ router.post("/auto-send-welcome", async (req, res) => {
  */
 router.post("/auto-send-survey", async (req, res) => {
   try {
-    const { fullName, email, phone } = req.body;
+    const { fullName, email, phone, campaignName = "firstoptionagency" } = req.body;
     if (!phone) return res.status(400).json({ success: false, error: "Phone number is required" });
 
     const cleanNumber = sanitizePhoneNumber(phone);
 
-    // Atomically patch pipelineStage: "survey_completed", status: "survey_completed", and stageMovedAt in Firebase RTDB
+    // Atomically patch pipelineStage: "survey_completed", status: "survey_completed" in Firebase RTDB
     if (email || phone) {
       await updateLeadStageInFirebase({
         phone: cleanNumber,
         email,
         pipelineStage: "survey_completed",
         status: "survey_completed",
+        campaignName,
       });
     }
 
-    const config = (await firebaseDb("whatsapp_configuration/firstoptionagency")) || {};
-    const stepConfig = config.step2Survey || { isEnabled: true };
-
     // Purge pending message queues from Step 1 (1st Connection)
     try {
-      const { cancelAllLeadTasks, syncLeadAutomations } = require("./whatsapp_pipeline_stage_configuration");
+      const { cancelAllLeadTasks } = require("./whatsapp_pipeline_stage_configuration");
       await cancelAllLeadTasks(cleanNumber);
-      syncLeadAutomations(
-        { fullName, email, phone: cleanNumber, pipelineStage: "survey_completed", status: "survey_completed" },
-        "in_progress"
-      ).catch(() => {});
     } catch (err) {
       console.error("[Auto Send Survey] Task queue purge exception:", err);
     }
 
-    if (stepConfig.isEnabled === false) {
-      return res.status(200).json({ success: false, disabled: true, message: "Step 2 Survey WhatsApp message is disabled." });
-    }
+    const result = await sendWorkflowStepMessage({
+      step: 2,
+      fullName,
+      email,
+      phone,
+      campaignName,
+    });
 
-    const instanceName = await resolveActiveInstance(config.selectedInstanceName);
-    if (!instanceName) return res.status(400).json({ success: false, error: "No active WhatsApp instance available." });
-
-    let rawTemplate = stepConfig.template || "Hello {{name}}, thank you for completing our qualification survey! Your answers have been recorded. Proceed to select a meeting time slot to complete your booking.";
-    const formattedMessage = rawTemplate
-      .replace(/\{\{\s*name\s*\}\}/gi, fullName || "Valued Client")
-      .replace(/\{\{\s*email\s*\}\}/gi, email || "N/A")
-      .replace(/\{\{\s*phone\s*\}\}/gi, phone || "N/A");
-
-    const evoRes = await evoApiCall(`/message/sendText/${instanceName}`, "POST", { number: cleanNumber, text: formattedMessage });
-
-    if (evoRes.ok) {
-      await firebaseDb(`whatsapp_unofficial_instances/${instanceName}`, "PATCH", { status: "open", qrCode: null, updatedAt: new Date().toISOString() });
-      const logId = `auto_survey_${Date.now()}`;
-      await firebaseDb(`whatsapp_logs/${instanceName}/${logId}`, "PUT", { id: logId, type: "auto_survey", number: cleanNumber, text: formattedMessage, status: "sent", timestamp: new Date().toISOString() });
-    }
-
-    return res.status(200).json({ success: evoRes.ok, message: evoRes.ok ? "Survey message sent" : "Send failed", data: evoRes.data });
+    return res.status(200).json(result);
   } catch (err) {
     console.error("Auto Send Survey Exception:", err);
     return res.status(500).json({ success: false, error: err.message });
@@ -1098,13 +1204,11 @@ router.post("/auto-send-survey", async (req, res) => {
  */
 router.post("/auto-send-meeting", async (req, res) => {
   try {
-    const { fullName, email, phone, date, time, meetingUrl } = req.body;
+    const { fullName, email, phone, date, time, meetingUrl, campaignName = "firstoptionagency" } = req.body;
     if (!phone) return res.status(400).json({ success: false, error: "Phone number is required" });
 
     const cleanNumber = sanitizePhoneNumber(phone);
-
-    const config = (await firebaseDb("whatsapp_configuration/firstoptionagency")) || {};
-    const stepConfig = config.step3Meeting || { isEnabled: true, sendWithCard: true };
+    const config = (await getWorkflowConfig(campaignName)) || {};
 
     const { createUniqueGoogleMeetEvent } = require("./google_calendar");
     let autoUniqueUrl = null;
@@ -1131,87 +1235,30 @@ router.post("/auto-send-meeting", async (req, res) => {
         meetingDate: date,
         meetingTime: time,
         meetingUrl: resolvedMeetingUrl,
+        campaignName,
       });
     }
 
-    // Purge pending message queues from Step 1 (1st Connection) and Step 2 (Survey) when meeting is booked
+    // Purge pending message queues from Step 1 and Step 2 when meeting is booked
     try {
-      const { cancelAllLeadTasks, syncLeadAutomations } = require("./whatsapp_pipeline_stage_configuration");
+      const { cancelAllLeadTasks } = require("./whatsapp_pipeline_stage_configuration");
       await cancelAllLeadTasks(cleanNumber);
-      syncLeadAutomations(
-        {
-          fullName,
-          email,
-          phone: cleanNumber,
-          pipelineStage: "meeting_booked",
-          status: "completed",
-          meeting: { meetingDate: date, meetingTime: time },
-        },
-        "survey_completed"
-      ).catch(() => {});
     } catch (err) {
       console.error("[Auto Send Meeting] Task queue purge exception:", err);
     }
 
-    if (stepConfig.isEnabled === false) {
-      return res.status(200).json({
-        success: false,
-        disabled: true,
-        meetingUrl: resolvedMeetingUrl,
-        message: "Step 3 Meeting WhatsApp confirmation is disabled.",
-      });
-    }
-
-    const instanceName = await resolveActiveInstance(config.selectedInstanceName);
-    if (!instanceName) return res.status(400).json({ success: false, error: "No active WhatsApp instance available." });
-
-    // Format custom message template configured in WhatsApp Manager Page
-    let rawTemplate =
-      stepConfig.template ||
-      "🎉 *Appointment Confirmed!*\n\nHi *{{name}}*,\nYour 1-on-1 Business Growth Consultation has been booked successfully.\n\n📅 *Date:* {{date}}\n⏰ *Time:* {{time}}\n📧 *Email:* {{email}}\n🎥 *Google Meet Link:* {{meeting_url}}\n\nWe're excited to help you scale your business revenue!";
-
-    const formattedMessage = rawTemplate
-      .replace(/\{\{\s*name\s*\}\}/gi, fullName || "Valued Client")
-      .replace(/\{\{\s*email\s*\}\}/gi, email || "N/A")
-      .replace(/\{\{\s*phone\s*\}\}/gi, phone || "N/A")
-      .replace(/\{\{\s*date\s*\}\}/gi, date || "Upcoming Date")
-      .replace(/\{\{\s*time\s*\}\}/gi, time || "Scheduled Time")
-      .replace(/\{\{\s*meeting_url\s*\}\}/gi, resolvedMeetingUrl)
-      .replace(/\{\{\s*meeting_link\s*\}\}/gi, resolvedMeetingUrl)
-      .replace(/\{\{\s*link\s*\}\}/gi, resolvedMeetingUrl);
-
-    console.log(`💬 [Auto Send Meeting] Dispatching meeting confirmation to ${cleanNumber} via active instance '${instanceName}'...`);
-
-    const evoRes = await evoApiCall(`/message/sendText/${instanceName}`, "POST", {
-      number: cleanNumber,
-      text: formattedMessage,
-    });
-
-    if (evoRes.ok) {
-      await firebaseDb(`whatsapp_unofficial_instances/${instanceName}`, "PATCH", {
-        status: "open",
-        qrCode: null,
-        updatedAt: new Date().toISOString(),
-      });
-      const logId = `auto_meeting_${Date.now()}`;
-      await firebaseDb(`whatsapp_logs/${instanceName}/${logId}`, "PUT", {
-        id: logId,
-        type: "auto_meeting",
-        number: cleanNumber,
-        text: formattedMessage,
-        status: "sent",
-        timestamp: new Date().toISOString(),
-      });
-    } else {
-      console.error(`❌ [Auto Send Meeting] Evolution API send failed for ${cleanNumber}:`, evoRes.data);
-    }
-
-    return res.status(200).json({
-      success: evoRes.ok,
+    const result = await sendWorkflowStepMessage({
+      step: 3,
+      fullName,
+      email,
+      phone,
+      date,
+      time,
       meetingUrl: resolvedMeetingUrl,
-      message: evoRes.ok ? "Meeting confirmation text sent via WhatsApp" : "WhatsApp send failed",
-      data: evoRes.data || null,
+      campaignName,
     });
+
+    return res.status(200).json(result);
   } catch (err) {
     console.error("Auto Send Meeting Exception:", err);
     return res.status(500).json({ success: false, error: err.message });
@@ -1612,8 +1659,16 @@ ${description}
 
 router.sendMetaCloudApiFounderNotification = sendMetaCloudApiFounderNotification;
 router.updateLeadStageInFirebase = updateLeadStageInFirebase;
+router.sendWorkflowStepMessage = sendWorkflowStepMessage;
+router.resolveActiveInstance = resolveActiveInstance;
+router.getWorkflowConfig = getWorkflowConfig;
+
 module.exports = router;
 module.exports.sendMetaCloudApiFounderNotification = sendMetaCloudApiFounderNotification;
 module.exports.updateLeadStageInFirebase = updateLeadStageInFirebase;
+module.exports.sendWorkflowStepMessage = sendWorkflowStepMessage;
+module.exports.resolveActiveInstance = resolveActiveInstance;
+module.exports.getWorkflowConfig = getWorkflowConfig;
+
 
 

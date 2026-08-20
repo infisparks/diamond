@@ -9,7 +9,7 @@ import {
   MASTER_ADMIN_UID,
   db,
 } from "@/lib/firebase";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, get } from "firebase/database";
 import { onAuthStateChanged, User } from "firebase/auth";
 
 interface WhatsappInstance {
@@ -200,32 +200,40 @@ export default function WhatsappManagerPage() {
 
   // Realtime Sync for WhatsApp Workflow Config from Firebase RTDB `/whatsapp_configuration/firstoptionagency`
   useEffect(() => {
+    const applyConfig = (data: any) => {
+      if (!data) return;
+      setConfig({
+        selectedInstanceName: data.selectedInstanceName || "diamond",
+        defaultMeetingUrl: data.defaultMeetingUrl || "https://meet.google.com/firstoption-strategy-call",
+        step1Welcome: {
+          isEnabled: data.step1Welcome?.isEnabled !== false,
+          template:
+            data.step1Welcome?.template ||
+            "Hello {{name}}, thank you for contacting DIAMOND BOUTIQUE! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.",
+        },
+        step2Survey: {
+          isEnabled: data.step2Survey?.isEnabled !== false,
+          template:
+            data.step2Survey?.template ||
+            "Hello {{name}}, thank you for completing our qualification survey! Your answers have been recorded. Proceed to select a meeting time slot to complete your booking.",
+        },
+        step3Meeting: {
+          isEnabled: data.step3Meeting?.isEnabled !== false,
+          sendWithCard: data.step3Meeting?.sendWithCard !== false,
+          template:
+            data.step3Meeting?.template ||
+            "🎉 Meeting Confirmed! Hello {{name}}, your consultation with Diamond Boutique is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}",
+        },
+      });
+    };
+
     const configRef = ref(db, "whatsapp_configuration/firstoptionagency");
     const unsubscribe = onValue(configRef, (snapshot) => {
       if (snapshot.exists()) {
-        const data = snapshot.val();
-        setConfig({
-          selectedInstanceName: data.selectedInstanceName || "",
-          defaultMeetingUrl: data.defaultMeetingUrl || "https://meet.google.com/firstoption-strategy-call",
-          step1Welcome: {
-            isEnabled: data.step1Welcome?.isEnabled !== false,
-            template:
-              data.step1Welcome?.template ||
-              "Hello {{name}}, thank you for contacting First Option Agency! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.",
-          },
-          step2Survey: {
-            isEnabled: data.step2Survey?.isEnabled !== false,
-            template:
-              data.step2Survey?.template ||
-              "Hello {{name}}, thank you for completing our qualification survey! Your answers have been recorded. Proceed to select a meeting time slot to complete your booking.",
-          },
-          step3Meeting: {
-            isEnabled: data.step3Meeting?.isEnabled !== false,
-            sendWithCard: data.step3Meeting?.sendWithCard !== false,
-            template:
-              data.step3Meeting?.template ||
-              "🎉 Meeting Confirmed! Hello {{name}}, your strategy session with First Option Agency is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}",
-          },
+        applyConfig(snapshot.val());
+      } else {
+        get(ref(db, "whatsapp_configuration/diamond")).then((snap) => {
+          if (snap.exists()) applyConfig(snap.val());
         });
       }
     });

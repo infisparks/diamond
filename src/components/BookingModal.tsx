@@ -692,7 +692,7 @@ export function BookingModal({
                 {/* Full Name */}
                 <div>
                   <label className="block text-xs font-bold text-purple-200 mb-1">
-                    Full Name / Store Name <span className="text-amber-400">*</span>
+                    Full Name  <span className="text-amber-400">*</span>
                   </label>
                   <input
                     type="text"

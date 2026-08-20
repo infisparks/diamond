@@ -26,7 +26,7 @@ export function DiamondStickyCTA({ onBookClick }: DiamondStickyCTAProps) {
     <>
       {/* Floating WhatsApp Action Button */}
       <a
-        href="https://wa.me/917709439688?text=Hi%20Diamond%20Boutique,%20mujhe%20Pakistani%20Suits%20ke%20designs%20aur%20prices%20jaanne%20hain"
+        href="https://wa.me/917709439688?text=Hi%20Diamond%20Boutique,%20mujhe%20Pakistani%20Style%20Pure%20Cotton%20Suits%20ke%20designs%20aur%20prices%20jaanne%20hain"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-18 sm:bottom-6 right-4 sm:right-6 bg-green-500 hover:bg-green-600 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-2xl sm:text-3xl shadow-[0_4px_25px_rgba(34,197,94,0.5)] z-40 hover:scale-110 active:scale-95 transition-all cursor-pointer"

@@ -94,13 +94,13 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
               Market mein bhatakna aur tailors ke chakkar band karo. Mumbai Attar Gali mein paayein <strong className="text-amber-300 font-semibold">Pakistani style Indian pure cotton lawn collections</strong>, in-house master tailor fitting, aur direct wholesale supply.
             </p>
 
-            {/* Mobile-Only Clean Showcase Thumbnail Card */}
-            <div className="lg:hidden my-1.5">
+            {/* Mobile-Only Showcase Thumbnail Card */}
+            <div className="lg:hidden my-2 w-full flex justify-center">
               <div
                 onClick={() => setIsVideoModalOpen(true)}
-                className="relative rounded-xl overflow-hidden border border-amber-400/40 shadow-xl bg-gradient-to-b from-purple-900/90 to-purple-980/95 w-full max-w-sm mx-auto backdrop-blur-md cursor-pointer group active:scale-[0.98] transition-transform duration-200"
+                className="relative rounded-2xl overflow-hidden border border-amber-400/40 shadow-xl bg-gradient-to-b from-purple-900/90 to-purple-980/95 w-full max-w-lg mx-auto backdrop-blur-md cursor-pointer group active:scale-[0.98] transition-transform duration-200"
               >
-                <div className="relative h-28 sm:h-32 w-full bg-slate-950 overflow-hidden">
+                <div className="relative h-40 xs:h-44 sm:h-48 w-full bg-slate-950 overflow-hidden">
                   <img
                     src={videoData.img}
                     alt="Diamond Boutique Collection Preview"
@@ -108,30 +108,30 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
                   />
                   
                   {/* Top Badges */}
-                  <div className="absolute top-1.5 left-2 right-2 flex justify-between items-center pointer-events-none">
-                    <span className="bg-black/75 backdrop-blur-md text-amber-300 text-[8.5px] font-extrabold px-2 py-0.5 rounded-full border border-amber-500/40 flex items-center gap-1 shadow">
-                      <i className="fa-solid fa-play text-amber-400 text-[8px]"></i> Watch Video
+                  <div className="absolute top-2 left-2.5 right-2.5 flex justify-between items-center pointer-events-none">
+                    <span className="bg-black/75 backdrop-blur-md text-amber-300 text-[9px] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-500/40 flex items-center gap-1 shadow">
+                      <i className="fa-solid fa-play text-amber-400 text-[8.5px]"></i> Watch Video
                     </span>
-                    <span className="bg-purple-950/80 backdrop-blur-md text-purple-200 text-[8.5px] font-bold px-2 py-0.5 rounded-full border border-purple-400/40 shadow">
+                    <span className="bg-purple-950/80 backdrop-blur-md text-purple-200 text-[9px] font-bold px-2.5 py-0.5 rounded-full border border-purple-400/40 shadow">
                       Pure Cotton Lawn
                     </span>
                   </div>
 
                   {/* Centered Glowing Play Button */}
                   <div className="absolute inset-0 bg-black/25 flex items-center justify-center">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-400 via-amber-500 to-amber-600 text-slate-950 flex items-center justify-center text-xs shadow-[0_0_15px_rgba(245,158,11,0.6)] group-hover:scale-110 transition-transform border-2 border-white/70">
-                      <i className="fa-solid fa-play ml-0.5 text-[10px]"></i>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-400 via-amber-500 to-amber-600 text-slate-950 flex items-center justify-center text-sm shadow-[0_0_18px_rgba(245,158,11,0.6)] group-hover:scale-110 transition-transform border-2 border-white/70">
+                      <i className="fa-solid fa-play ml-0.5 text-xs"></i>
                     </div>
                   </div>
                 </div>
 
-                {/* Clean Compact Caption Bar */}
-                <div className="py-1.5 px-2.5 bg-[#120224] border-t border-purple-500/30 text-center flex items-center justify-between gap-2">
-                  <p className="font-serif font-bold text-[10.5px] text-amber-300 truncate text-left flex-1">
+                {/* Clean Centered Caption Bar */}
+                <div className="p-2.5 bg-[#120224] border-t border-purple-500/30 text-center">
+                  <p className="font-serif font-bold text-xs text-amber-300 leading-tight">
                     {videoData.caption}
                   </p>
-                  <p className="text-[9px] text-purple-300 whitespace-nowrap flex items-center gap-1 shrink-0">
-                    <i className="fa-brands fa-youtube text-red-500 text-[10px]"></i> Store Tour
+                  <p className="text-[10px] text-purple-300 mt-1 flex items-center justify-center gap-1.5">
+                    <i className="fa-brands fa-youtube text-red-500"></i> Tap to play store tour video
                   </p>
                 </div>
               </div>

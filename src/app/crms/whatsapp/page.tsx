@@ -92,22 +92,69 @@ export default function WhatsappManagerPage() {
 
   // Auto-Workflow Config State for 3 Steps
   const [config, setConfig] = useState<WhatsappWorkflowConfig>({
-    selectedInstanceName: "",
+    selectedInstanceName: "diamond",
     defaultMeetingUrl: "https://meet.google.com/firstoption-strategy-call",
     step1Welcome: {
       isEnabled: true,
-      template:
-        "Hello {{name}}, thank you for contacting First Option Agency! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.",
+      template: `🌸 *DIAMOND BOUTIQUE • Siddiqui Coutures* 🌸
+_Luxury Pakistani Suits & Wholesale Hub_
+
+Assalam-o-Alaikum & Welcome *{{name}}*! ✨
+
+Thank you for reaching out to us. We have received your inquiry:
+📱 *Phone:* {{phone}}
+📧 *Email:* {{email}}
+
+👗 *What we offer:*
+• 100% Original Pakistani Luxury Lawn & Festive Collections
+• B2B Wholesale / Reseller Bulk Lots (Best Market Rates)
+• Custom In-House Master Tailoring & Fitting
+• Attar Gali Store VIP Consultation
+
+Our fashion consultant is reviewing your details and will connect with you shortly on WhatsApp!
+
+📍 *Store Address:* Attar Gali, Mumbai
+📞 *Direct Helpline:* +91 77094 39688`,
     },
     step2Survey: {
       isEnabled: true,
-      template:
-        "Hello {{name}}, thank you for completing our qualification survey! Your answers have been recorded. Proceed to select a meeting time slot to complete your booking.",
+      template: `✨ *DIAMOND BOUTIQUE • Requirement Received* ✨
+
+Hello *{{name}}*, 
+
+Thank you for completing your requirement assessment! 📋
+
+Your preferences have been shared with our styling team. We are preparing tailored designs, pricing, and digital video catalogues matching your exact requirement.
+
+👉 *Next Step:* Select your preferred date & time slot to lock in your Store Visit or WhatsApp Video Call Walkthrough.
+
+📍 *Diamond Boutique • Attar Gali, Mumbai*`,
     },
     step3Meeting: {
       isEnabled: true,
-      template:
-        "🎉 Meeting Confirmed! Hello {{name}}, your strategy session with First Option Agency is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}",
+      sendWithCard: true,
+      template: `🎉 *APPOINTMENT CONFIRMED!* 🎉
+*DIAMOND BOUTIQUE • Siddiqui Coutures*
+
+Dear *{{name}}*,
+
+Your VIP Store Consultation slot has been successfully scheduled! ✨
+
+━━━━━━━━━━━━━━━━━━━━
+📅 *Date:* {{date}}
+⏰ *Time:* {{time}}
+👤 *Client Name:* {{name}}
+📱 *Phone:* {{phone}}
+🎥 *Virtual Meeting Link:* {{meeting_url}}
+━━━━━━━━━━━━━━━━━━━━
+
+📍 *Store Location:* Attar Gali, Mumbai
+🛍️ *What to expect:*
+• Exclusive preview of fresh partywear & lawn collections
+• Live fabric inspection & wholesale lot rate list
+• Personal fitting assistance & master tailor consultation
+
+Need help or want to reschedule? Reply directly to this WhatsApp message. We look forward to seeing you! 🌸`,
     },
   });
   const [isSavingConfig, setIsSavingConfig] = useState(false);

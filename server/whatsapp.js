@@ -630,6 +630,63 @@ async function getWorkflowConfig(campaignName = "firstoptionagency") {
   }
 }
 
+const DEFAULT_TEMPLATES = {
+  step1: `🌸 *DIAMOND BOUTIQUE • Siddiqui Coutures* 🌸
+_Luxury Pakistani Suits & Wholesale Hub_
+
+Assalam-o-Alaikum & Welcome *{{name}}*! ✨
+
+Thank you for reaching out to us. We have received your inquiry:
+📱 *Phone:* {{phone}}
+📧 *Email:* {{email}}
+
+👗 *What we offer:*
+• 100% Original Pakistani Luxury Lawn & Festive Collections
+• B2B Wholesale / Reseller Bulk Lots (Best Market Rates)
+• Custom In-House Master Tailoring & Fitting
+• Attar Gali Store VIP Consultation
+
+Our fashion consultant is reviewing your details and will connect with you shortly on WhatsApp!
+
+📍 *Store Address:* Attar Gali, Mumbai
+📞 *Direct Helpline:* +91 77094 39688`,
+
+  step2: `✨ *DIAMOND BOUTIQUE • Requirement Received* ✨
+
+Hello *{{name}}*, 
+
+Thank you for completing your requirement assessment! 📋
+
+Your preferences have been shared with our styling team. We are preparing tailored designs, pricing, and digital video catalogues matching your exact requirement.
+
+👉 *Next Step:* Select your preferred date & time slot to lock in your Store Visit or WhatsApp Video Call Walkthrough.
+
+📍 *Diamond Boutique • Attar Gali, Mumbai*`,
+
+  step3: `🎉 *APPOINTMENT CONFIRMED!* 🎉
+*DIAMOND BOUTIQUE • Siddiqui Coutures*
+
+Dear *{{name}}*,
+
+Your VIP Store Consultation slot has been successfully scheduled! ✨
+
+━━━━━━━━━━━━━━━━━━━━
+📅 *Date:* {{date}}
+⏰ *Time:* {{time}}
+👤 *Client Name:* {{name}}
+📱 *Phone:* {{phone}}
+🎥 *Virtual Meeting Link:* {{meeting_url}}
+━━━━━━━━━━━━━━━━━━━━
+
+📍 *Store Location:* Attar Gali, Mumbai
+🛍️ *What to expect:*
+• Exclusive preview of fresh partywear & lawn collections
+• Live fabric inspection & wholesale lot rate list
+• Personal fitting assistance & master tailor consultation
+
+Need help or want to reschedule? Reply directly to this WhatsApp message. We look forward to seeing you! 🌸`
+};
+
 /**
  * 9. Get WhatsApp Lead Workflow Configuration (Step 1 Contact, Step 2 Survey, Step 3 Meeting)
  * GET /api/whatsapp/config
@@ -643,15 +700,15 @@ router.get("/config", async (req, res) => {
       defaultMeetingUrl: config.defaultMeetingUrl || "https://meet.google.com/firstoption-strategy-call",
       step1Welcome: {
         isEnabled: config.step1Welcome?.isEnabled !== undefined ? config.step1Welcome.isEnabled : (config.isEnabled !== undefined ? config.isEnabled : true),
-        template: config.step1Welcome?.template || config.welcomeMessageTemplate || "Hello {{name}}, thank you for contacting DIAMOND BOUTIQUE! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.",
+        template: config.step1Welcome?.template || config.welcomeMessageTemplate || DEFAULT_TEMPLATES.step1,
       },
       step2Survey: {
         isEnabled: config.step2Survey?.isEnabled !== undefined ? config.step2Survey.isEnabled : true,
-        template: config.step2Survey?.template || "Hello {{name}}, thank you for completing our qualification survey! Your answers have been recorded. Proceed to select a meeting time slot to complete your booking.",
+        template: config.step2Survey?.template || DEFAULT_TEMPLATES.step2,
       },
       step3Meeting: {
         isEnabled: config.step3Meeting?.isEnabled !== undefined ? config.step3Meeting.isEnabled : true,
-        template: config.step3Meeting?.template || "🎉 Meeting Confirmed! Hello {{name}}, your consultation with Diamond Boutique is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}",
+        template: config.step3Meeting?.template || DEFAULT_TEMPLATES.step3,
       },
     };
     return res.status(200).json({ success: true, data: defaultConfig });
@@ -673,15 +730,15 @@ router.post("/config", async (req, res) => {
       defaultMeetingUrl: defaultMeetingUrl || "https://meet.google.com/firstoption-strategy-call",
       step1Welcome: {
         isEnabled: step1Welcome?.isEnabled !== false,
-        template: step1Welcome?.template || "Hello {{name}}, thank you for contacting DIAMOND BOUTIQUE! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.",
+        template: step1Welcome?.template || DEFAULT_TEMPLATES.step1,
       },
       step2Survey: {
         isEnabled: step2Survey?.isEnabled !== false,
-        template: step2Survey?.template || "Hello {{name}}, thank you for completing our qualification survey! Your answers have been recorded. Proceed to select a meeting time slot to complete your booking.",
+        template: step2Survey?.template || DEFAULT_TEMPLATES.step2,
       },
       step3Meeting: {
         isEnabled: step3Meeting?.isEnabled !== false,
-        template: step3Meeting?.template || "🎉 Meeting Confirmed! Hello {{name}}, your consultation with Diamond Boutique is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}",
+        template: step3Meeting?.template || DEFAULT_TEMPLATES.step3,
       },
       updatedAt: new Date().toISOString(),
     };
@@ -1046,15 +1103,15 @@ async function sendWorkflowStepMessage({
 
     if (step === 1 || step === "step1" || step === "welcome") {
       stepConfig = config.step1Welcome || { isEnabled: true };
-      defaultTemplate = "Hello {{name}}, thank you for contacting DIAMOND BOUTIQUE! We have received your contact details (Email: {{email}}, Phone: {{phone}}). Our team will get back to you shortly.";
+      defaultTemplate = DEFAULT_TEMPLATES.step1;
       msgType = "auto_welcome";
     } else if (step === 2 || step === "step2" || step === "survey") {
       stepConfig = config.step2Survey || { isEnabled: true };
-      defaultTemplate = "Hello {{name}}, thank you for completing our qualification survey! Your answers have been recorded. Proceed to select a meeting time slot to complete your booking.";
+      defaultTemplate = DEFAULT_TEMPLATES.step2;
       msgType = "auto_survey";
     } else if (step === 3 || step === "step3" || step === "meeting") {
       stepConfig = config.step3Meeting || { isEnabled: true };
-      defaultTemplate = "🎉 Meeting Confirmed! Hello {{name}}, your consultation with Diamond Boutique is booked for {{date}} at {{time}}. Click here to join your video call: {{meeting_url}}";
+      defaultTemplate = DEFAULT_TEMPLATES.step3;
       msgType = "auto_meeting";
     }
 

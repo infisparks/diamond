@@ -156,24 +156,16 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
               </div>
             </div>
 
-            {/* Action CTA Buttons */}
-            <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-2.5 pt-1">
+            {/* Action CTA Button */}
+            <div className="flex items-center justify-center lg:justify-start pt-1">
               <button
                 type="button"
-                onClick={() => onBookClick("Hero Consultation CTA")}
-                className="w-full xs:w-auto bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-extrabold px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl text-xs sm:text-sm shadow-[0_0_25px_rgba(245,158,11,0.45)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                onClick={() => onBookClick("Hero Wholesale Catalogue CTA")}
+                className="w-full xs:w-auto bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-extrabold px-6 py-3.5 sm:px-7 sm:py-4 rounded-xl text-xs sm:text-sm shadow-[0_0_25px_rgba(245,158,11,0.45)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2.5 cursor-pointer"
               >
-                <i className="fa-solid fa-calendar-check text-sm"></i>
-                <span>Book VIP Store Consultation</span>
+                <i className="fa-solid fa-file-pdf text-sm sm:text-base"></i>
+                <span>Get Wholesale Catalogue &amp; Best Rate List</span>
               </button>
-
-              <a
-                href="#wholesale"
-                className="w-full xs:w-auto bg-purple-900/60 hover:bg-purple-800 border border-purple-400/40 text-purple-200 hover:text-white font-bold px-4 py-3 sm:px-5 sm:py-3.5 rounded-xl text-xs sm:text-sm transition-all flex items-center justify-center gap-2"
-              >
-                <i className="fa-solid fa-store text-amber-400 text-xs"></i>
-                <span>B2B Reseller Portal</span>
-              </a>
             </div>
 
             {/* Micro Sub-copy Trust Note */}

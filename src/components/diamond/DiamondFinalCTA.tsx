@@ -27,18 +27,13 @@ export function DiamondFinalCTA({ onBookClick }: DiamondFinalCTAProps) {
               Niche diye button par click karein aur direct VIP store appointment ya distributorship quotation paayein!
             </p>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-2.5 pt-1.5">
+            <div className="flex justify-center pt-1.5">
               <button
-                onClick={() => onBookClick("Final Banner VIP Visit")}
-                className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-extrabold px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:scale-105 active:scale-95 transition-all text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+                onClick={() => onBookClick("Final Banner Wholesale Catalogue CTA")}
+                className="w-full sm:w-auto bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-extrabold px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl shadow-[0_0_25px_rgba(245,158,11,0.45)] hover:scale-105 active:scale-95 transition-all text-xs sm:text-sm flex items-center justify-center gap-2.5 cursor-pointer"
               >
-                <i className="fa-solid fa-calendar-check"></i> BOOK STORE VISIT NOW
-              </button>
-              <button
-                onClick={() => onBookClick("Final Banner Distributor Application")}
-                className="bg-purple-900/90 hover:bg-purple-800 text-white font-extrabold px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl shadow-lg border border-purple-400/50 hover:border-amber-400 active:scale-95 transition-all text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <i className="fa-solid fa-handshake text-amber-400"></i> APPLY FOR DISTRIBUTORSHIP
+                <i className="fa-solid fa-file-pdf text-sm sm:text-base"></i>
+                <span>GET WHOLESALE CATALOGUE &amp; BEST RATE LIST</span>
               </button>
             </div>
           </div>

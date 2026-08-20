@@ -30,7 +30,7 @@ export const CAMPAIGNS: Record<string, CampaignConfig> = {
         options: [
           { label: "B2B Wholesale / Reseller Bulk Lots (10+ Suits)", key: "A" },
           { label: "Personal Luxury Ready-Made Pakistani Suits (Retail)", key: "B" },
-          { label: "Unstitched Original Lawn + In-House Custom Stitching", key: "C" },
+          { label: "Unstitched Pakistani Style Pure Cotton Lawn + In-House Custom Stitching", key: "C" },
           { label: "VIP Store Visit & Fitting Consultation in Attar Gali", key: "D" },
         ],
       },
@@ -82,7 +82,7 @@ export const CAMPAIGNS: Record<string, CampaignConfig> = {
         options: [
           { label: "B2B Wholesale / Reseller Bulk Lots (10+ Suits)", key: "A" },
           { label: "Personal Luxury Ready-Made Pakistani Suits (Retail)", key: "B" },
-          { label: "Unstitched Original Lawn + In-House Custom Stitching", key: "C" },
+          { label: "Unstitched Pakistani Style Pure Cotton Lawn + In-House Custom Stitching", key: "C" },
           { label: "VIP Store Visit & Fitting Consultation in Attar Gali", key: "D" },
         ],
       },
@@ -134,7 +134,7 @@ export const CAMPAIGNS: Record<string, CampaignConfig> = {
         options: [
           { label: "B2B Wholesale / Reseller Bulk Lots (10+ Suits)", key: "A" },
           { label: "Personal Luxury Ready-Made Pakistani Suits (Retail)", key: "B" },
-          { label: "Unstitched Original Lawn + In-House Custom Stitching", key: "C" },
+          { label: "Unstitched Pakistani Style Pure Cotton Lawn + In-House Custom Stitching", key: "C" },
           { label: "VIP Store Visit & Fitting Consultation in Attar Gali", key: "D" },
         ],
       },

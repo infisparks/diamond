@@ -84,7 +84,7 @@ export function DiamondFooter() {
           </p>
           <div className="mt-3 pt-2 border-t border-purple-900/60 space-y-1">
             <p className="text-amber-300 font-bold text-xs">
-              <i className="fa-solid fa-phone text-amber-400 mr-1.5"></i> +91 98765 43210
+              <i className="fa-solid fa-phone text-amber-400 mr-1.5"></i> +91 77094 39688
             </p>
             <p className="text-purple-300 text-[11px]">
               <i className="fa-solid fa-clock mr-1.5 text-purple-400"></i> Mon–Sat: 11:00 AM – 9:30 PM

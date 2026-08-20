@@ -596,7 +596,7 @@ export function BookingModal({
   };
 
   const whatsappMessage = `Hi Diamond Boutique, I just booked a store consultation / visit.\nName: ${contactInfo.fullName || "Customer"}\nEmail: ${contactInfo.email || "N/A"}\nPhone: ${contactInfo.countryCode} ${contactInfo.phone || "N/A"}\nBooked Slot: ${formattedBookingDate} at ${selectedTimeSlot || "02:00 PM"}`;
-  const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = `https://wa.me/917709439688?text=${encodeURIComponent(whatsappMessage)}`;
 
   const qualificationQuestions = activeCampaign.questions;
 
@@ -652,7 +652,7 @@ export function BookingModal({
 
           <div className="space-y-2.5 mt-5">
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/917709439688"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full bg-green-600 hover:bg-green-500 text-white font-black p-3.5 rounded-2xl text-xs sm:text-sm uppercase tracking-wide flex items-center justify-center space-x-2 shadow-xl cursor-pointer"

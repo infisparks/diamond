@@ -641,7 +641,7 @@ Thank you for reaching out to us. We have received your inquiry:
 📧 *Email:* {{email}}
 
 👗 *What we offer:*
-• 100% Original Pakistani Luxury Lawn & Festive Collections
+• Pakistani Style Pure Cotton Luxury Lawn & Festive Collections
 • B2B Wholesale / Reseller Bulk Lots (Best Market Rates)
 • Custom In-House Master Tailoring & Fitting
 • Attar Gali Store VIP Consultation
@@ -680,7 +680,7 @@ Your VIP Store Consultation slot has been successfully scheduled! ✨
 
 📍 *Store Location:* Attar Gali, Mumbai
 🛍️ *What to expect:*
-• Exclusive preview of fresh partywear & lawn collections
+• Exclusive preview of fresh partywear & Pakistani style pure cotton lawn collections
 • Live fabric inspection & wholesale lot rate list
 • Personal fitting assistance & master tailor consultation
 

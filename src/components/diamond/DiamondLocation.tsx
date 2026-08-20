@@ -79,8 +79,7 @@ export function DiamondLocation({ onBookClick, onShowToast }: DiamondLocationPro
                   <i className="fa-solid fa-phone text-amber-600"></i> Direct Phone Line
                 </div>
                 <div className="text-xs text-slate-600 font-medium">
-                  +91 98765 43210<br />
-                  +91 98200 12345
+                  +91 77094 39688
                 </div>
               </div>
             </div>

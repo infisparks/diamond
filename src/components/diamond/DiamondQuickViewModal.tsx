@@ -19,7 +19,7 @@ export function DiamondQuickViewModal({
   const waMessage = encodeURIComponent(
     `Hi Diamond Boutique,\nMujhe is suit ke baare mein order/inquire karna hai:\n*${product.title}*\nPhoto: ${product.img}\nDetails send karein.`
   );
-  const waUrl = `https://wa.me/919876543210?text=${waMessage}`;
+  const waUrl = `https://wa.me/917709439688?text=${waMessage}`;
 
   return (
     <div

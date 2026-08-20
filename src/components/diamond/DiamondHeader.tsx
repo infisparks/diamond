@@ -32,7 +32,7 @@ export function DiamondHeader({ onBookClick }: DiamondHeaderProps) {
           {/* Quick Header Actions */}
           <div className="flex items-center gap-2">
             <a
-              href="tel:+919876543210"
+              href="tel:+917709439688"
               className="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg bg-purple-950/80 border border-purple-400/30 text-purple-200 hover:bg-purple-900 hover:text-white transition-all text-[11px] sm:text-xs font-semibold flex items-center gap-1.5"
             >
               <i className="fa-solid fa-phone text-[10px] text-amber-400"></i>

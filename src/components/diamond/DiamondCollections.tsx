@@ -216,7 +216,7 @@ export function DiamondCollections({ onSelectProduct }: DiamondCollectionsProps)
                       const msg = encodeURIComponent(
                         `Hi Diamond Boutique, mujhe ${product.title} order karna hai.`
                       );
-                      window.open(`https://wa.me/919876543210?text=${msg}`, "_blank");
+                      window.open(`https://wa.me/917709439688?text=${msg}`, "_blank");
                     }}
                     className="bg-green-600 hover:bg-green-500 text-white font-bold p-1.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-xs flex items-center gap-1 shadow-sm transition-all cursor-pointer"
                   >
@@ -232,7 +232,7 @@ export function DiamondCollections({ onSelectProduct }: DiamondCollectionsProps)
         {/* WhatsApp Full Catalogue Button */}
         <div className="mt-8 sm:mt-10 text-center">
           <a
-            href="https://wa.me/919876543210?text=Hi%20Diamond%20Boutique,%20please%20send%20me%20your%20complete%20PDF%20catalog%20with%20prices"
+            href="https://wa.me/917709439688?text=Hi%20Diamond%20Boutique,%20please%20send%20me%20your%20complete%20PDF%20catalog%20with%20prices"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-purple-950 hover:bg-purple-900 text-amber-300 font-bold px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl border border-purple-500/40 text-xs sm:text-sm shadow-md transition-all cursor-pointer"

@@ -1,17 +1,38 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 interface DiamondHeroProps {
   onBookClick: (source?: string) => void;
   onExploreClick: () => void;
 }
 
+const YOUTUBE_VIDEO_ID = "dojh5hOuryE";
+
 export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+
   const videoData = {
     caption: '"Mumbai Ki Garmi Mein Breathable Luxury Lawn Ka Real Comfort!"',
-    img: "/product/royal-violet-gold-embroidered-suit.webp",
+    img: "/herothumbnial.png",
   };
+
+  // Close modal on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsVideoModalOpen(false);
+      }
+    };
+    if (isVideoModalOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "unset";
+    };
+  }, [isVideoModalOpen]);
 
   return (
     <section
@@ -76,7 +97,7 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
             {/* Mobile-Only Clean Showcase Thumbnail Card */}
             <div className="lg:hidden my-2">
               <div
-                onClick={() => onBookClick("Featured Video Click")}
+                onClick={() => setIsVideoModalOpen(true)}
                 className="relative rounded-2xl overflow-hidden border border-amber-400/40 shadow-2xl bg-gradient-to-b from-purple-900/90 to-purple-980/95 w-full max-w-sm mx-auto backdrop-blur-md cursor-pointer group hover:scale-[1.02] transition-transform duration-300"
               >
                 <div className="relative aspect-[16/9] w-full bg-slate-950 overflow-hidden">
@@ -89,7 +110,7 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
                   {/* Top Badges */}
                   <div className="absolute top-2 left-2 right-2 flex justify-between items-center pointer-events-none">
                     <span className="bg-black/75 backdrop-blur-md text-amber-300 text-[9.5px] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-500/40 flex items-center gap-1 shadow">
-                      <i className="fa-solid fa-film text-red-400"></i> Store Tour &amp; Fabric
+                      <i className="fa-solid fa-play text-amber-400 text-[9px]"></i> Watch Video
                     </span>
                     <span className="bg-purple-950/80 backdrop-blur-md text-purple-200 text-[9.5px] font-bold px-2.5 py-0.5 rounded-full border border-purple-400/40 shadow">
                       100% Original Lawn
@@ -108,6 +129,9 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
                 <div className="p-2.5 bg-[#120224] border-t border-purple-500/30 text-center">
                   <p className="font-serif font-bold text-xs text-amber-300 leading-snug">
                     {videoData.caption}
+                  </p>
+                  <p className="text-[10px] text-purple-300 mt-1 flex items-center justify-center gap-1">
+                    <i className="fa-brands fa-youtube text-red-500"></i> Tap to play store tour video
                   </p>
                 </div>
               </div>
@@ -167,7 +191,7 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
           {/* Desktop Right Video Card Frame */}
           <div className="hidden lg:block lg:col-span-5">
             <div
-              onClick={() => onBookClick("Desktop Featured Video Click")}
+              onClick={() => setIsVideoModalOpen(true)}
               className="relative rounded-3xl overflow-hidden border border-amber-400/35 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(168,85,247,0.25)] bg-gradient-to-b from-purple-900/90 to-purple-980/95 max-w-md mx-auto backdrop-blur-md cursor-pointer group hover:scale-[1.02] transition-transform duration-300"
             >
               <div className="relative aspect-[16/10] w-full bg-slate-950 overflow-hidden">
@@ -180,7 +204,7 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
                 {/* Top Badges */}
                 <div className="absolute top-3 left-3 right-3 flex justify-between items-center pointer-events-none">
                   <span className="bg-black/75 backdrop-blur-md text-amber-300 text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-amber-500/40 flex items-center gap-1 shadow">
-                    <i className="fa-solid fa-film text-red-400"></i> Store Tour &amp; Fabric
+                    <i className="fa-solid fa-play text-amber-400 text-[9px]"></i> Watch Video
                   </span>
                   <span className="bg-purple-950/80 backdrop-blur-md text-purple-200 text-[10px] font-bold px-2.5 py-1 rounded-full border border-purple-400/40 shadow">
                     100% Original Lawn
@@ -200,7 +224,9 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
                 <p className="font-serif font-bold text-xs sm:text-sm text-amber-300 leading-snug">
                   {videoData.caption}
                 </p>
-                <p className="text-[10.5px] text-purple-200 mt-1">Siddiqui Coutures • Attar Gali, Mumbai</p>
+                <p className="text-[10.5px] text-purple-200 mt-1 flex items-center justify-center gap-1.5">
+                  <i className="fa-brands fa-youtube text-red-500"></i> Click to play store tour video
+                </p>
               </div>
             </div>
           </div>
@@ -220,6 +246,74 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
         </div>
 
       </div>
+
+      {/* YouTube Video Modal */}
+      {isVideoModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
+          onClick={() => setIsVideoModalOpen(false)}
+        >
+          <div
+            className="bg-[#120224] border border-amber-400/40 rounded-3xl w-full max-w-sm sm:max-w-md overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_30px_rgba(245,158,11,0.25)] relative flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="px-4 py-3 bg-purple-950/90 border-b border-purple-500/30 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-md bg-gradient-to-br from-amber-300 to-amber-600 flex items-center justify-center text-slate-950 font-black text-xs">
+                  <i className="fa-solid fa-gem"></i>
+                </div>
+                <div>
+                  <h3 className="font-serif font-black text-xs sm:text-sm text-white tracking-wide">
+                    DIAMOND BOUTIQUE
+                  </h3>
+                  <p className="text-[9px] text-amber-300">Store Tour &amp; Fabric Showcase</p>
+                </div>
+              </div>
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsVideoModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center border border-white/20 transition-colors cursor-pointer"
+                aria-label="Close video"
+              >
+                <i className="fa-solid fa-xmark text-sm"></i>
+              </button>
+            </div>
+
+            {/* Video Player (Shorts 9:16 optimized aspect ratio) */}
+            <div className="relative w-full aspect-[9/16] max-h-[65vh] sm:max-h-[70vh] bg-black flex items-center justify-center">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+                title="Diamond Boutique Store Tour Video"
+                className="w-full h-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              ></iframe>
+            </div>
+
+            {/* Modal Footer / Action CTA */}
+            <div className="p-3.5 sm:p-4 bg-gradient-to-t from-purple-980 to-[#120224] border-t border-purple-500/30 text-center space-y-2.5">
+              <p className="text-slate-200 text-xs font-serif font-bold text-amber-200">
+                {videoData.caption}
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsVideoModalOpen(false);
+                  onBookClick("Hero Video Modal Booking CTA");
+                }}
+                className="w-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-black py-3 px-4 rounded-xl text-xs sm:text-sm uppercase tracking-wide flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(245,158,11,0.4)] hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+              >
+                <i className="fa-brands fa-whatsapp text-base"></i>
+                <span>Store Visit / Suit Book Karein</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
+

@@ -117,7 +117,7 @@ Our fashion consultant is reviewing your details and will connect with you short
 📞 *Direct Helpline:* +91 77094 39688`,
     },
     step2Survey: {
-      isEnabled: true,
+      isEnabled: false,
       template: `✨ *DIAMOND BOUTIQUE • Requirement Received* ✨
 
 Hello *{{name}}*, 

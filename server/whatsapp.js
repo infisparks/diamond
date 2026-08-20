@@ -703,7 +703,7 @@ router.get("/config", async (req, res) => {
         template: config.step1Welcome?.template || config.welcomeMessageTemplate || DEFAULT_TEMPLATES.step1,
       },
       step2Survey: {
-        isEnabled: config.step2Survey?.isEnabled !== undefined ? config.step2Survey.isEnabled : true,
+        isEnabled: config.step2Survey?.isEnabled !== undefined ? config.step2Survey.isEnabled : false,
         template: config.step2Survey?.template || DEFAULT_TEMPLATES.step2,
       },
       step3Meeting: {
@@ -1072,6 +1072,9 @@ async function resolveActiveInstance(preferredInstance) {
   }
 }
 
+// Synchronous in-memory lock to instantly block twin/concurrent duplicate requests
+const workflowSendingLocks = new Map();
+
 /**
  * Modular Helper: Dispatches Step 1 Welcome, Step 2 Survey, or Step 3 Meeting WhatsApp Message
  */
@@ -1090,6 +1093,23 @@ async function sendWorkflowStepMessage({
     const cleanNumber = sanitizePhoneNumber(phone);
     if (!cleanNumber || cleanNumber.length < 5) return { success: false, error: "Invalid phone number" };
 
+    // STEP 2 SURVEY IS DISABLED BY USER CONFIGURATION
+    if (step === 2 || step === "step2" || step === "survey") {
+      console.log(`[Workflow WA ℹ️] Step 2 survey message is disabled.`);
+      return { success: false, disabled: true, message: "Step 2 Survey WhatsApp message is turned off." };
+    }
+
+    // 1. Synchronous in-memory debounce lock (blocks rapid concurrent twin requests within 60s)
+    const lockKey = `${cleanNumber}_step_${step}`;
+    const lastLockMs = workflowSendingLocks.get(lockKey) || 0;
+    const nowMs = Date.now();
+    if (nowMs - lastLockMs < 60000) {
+      console.log(`[Workflow WA 🛡️] Duplicate blocked in-memory: Step ${step} for ${cleanNumber} already processed ${Math.round((nowMs - lastLockMs) / 1000)}s ago.`);
+      return { success: true, duplicate: true, message: "Duplicate message suppressed by memory lock" };
+    }
+    // Set memory lock immediately before any async call
+    workflowSendingLocks.set(lockKey, nowMs);
+
     const config = await getWorkflowConfig(campaignName);
     const instanceName = await resolveActiveInstance(config.selectedInstanceName);
     if (!instanceName) {
@@ -1105,10 +1125,6 @@ async function sendWorkflowStepMessage({
       stepConfig = config.step1Welcome || { isEnabled: true };
       defaultTemplate = DEFAULT_TEMPLATES.step1;
       msgType = "auto_welcome";
-    } else if (step === 2 || step === "step2" || step === "survey") {
-      stepConfig = config.step2Survey || { isEnabled: true };
-      defaultTemplate = DEFAULT_TEMPLATES.step2;
-      msgType = "auto_survey";
     } else if (step === 3 || step === "step3" || step === "meeting") {
       stepConfig = config.step3Meeting || { isEnabled: true };
       defaultTemplate = DEFAULT_TEMPLATES.step3;
@@ -1119,14 +1135,13 @@ async function sendWorkflowStepMessage({
       return { success: false, disabled: true, message: `Step ${step} message disabled in settings.` };
     }
 
-    // Idempotency: Avoid rapid duplicate sends within 20s
+    // 2. Firebase persistent idempotency check
     const idempotencyKey = `wf_${cleanNumber}_step_${step}`;
     const sentRecord = await firebaseDb(`whatsapp_sent_automations/${idempotencyKey}`);
-    const nowMs = Date.now();
     if (sentRecord && sentRecord.sentAt) {
       const sentMs = new Date(sentRecord.sentAt).getTime();
-      if (nowMs - sentMs < 20000) {
-        console.log(`[Workflow WA 🛡️] Duplicate suppression: Step ${step} message already sent to ${cleanNumber} ${Math.round((nowMs - sentMs) / 1000)}s ago.`);
+      if (nowMs - sentMs < 60000) {
+        console.log(`[Workflow WA 🛡️] Persistent duplicate blocked: Step ${step} already sent to ${cleanNumber} ${Math.round((nowMs - sentMs) / 1000)}s ago.`);
         return { success: true, duplicate: true };
       }
     }

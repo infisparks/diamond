@@ -423,36 +423,6 @@ async function _executeSyncLeadAutomationsInternal(leadData, previousStage, prev
       }
     }
 
-    // 1. Automatic Instant Workflow Message Dispatch (Step 1 Welcome / Step 2 Survey / Step 3 Meeting)
-    try {
-      const { sendWorkflowStepMessage } = require("./whatsapp");
-      if (typeof sendWorkflowStepMessage === "function") {
-        let targetStep = 0;
-        if (currentNorm === "inprogress" || currentNorm === "1stconnection" || currentNorm === "raw" || currentNorm === "partial") {
-          targetStep = 1;
-        } else if (currentNorm === "surveycompleted" || currentNorm === "survey" || currentNorm === "step2") {
-          targetStep = 2;
-        } else if (currentNorm === "meetingbooked" || currentNorm === "meeting" || currentNorm === "completed" || currentNorm === "booked" || currentNorm === "step3") {
-          targetStep = 3;
-        }
-
-        if (targetStep > 0) {
-          sendWorkflowStepMessage({
-            step: targetStep,
-            fullName: leadData.fullName || cleanPhone,
-            email: leadData.email || "",
-            phone: cleanPhone,
-            date: currentMeetingDate,
-            time: currentMeetingTime,
-            meetingUrl: leadData.meeting?.meetingUrl || null,
-            campaignName: leadData.campaign || "firstoptionagency",
-          }).catch((err) => console.error("[SyncLead Step WA Dispatch Error]:", err));
-        }
-      }
-    } catch (wErr) {
-      console.error("[SyncLead WA Workflow Error]:", wErr);
-    }
-
     // Fetch active rules from RTDB (checking both campaign and fallback)
     const targetCampaign = leadData.campaign || "firstoptionagency";
     let allStageRulesObj = (await firebaseDb(`whatsapp_stage_automations/${targetCampaign}`)) || {};

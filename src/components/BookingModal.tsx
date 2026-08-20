@@ -494,18 +494,6 @@ export function BookingModal({
     saveOrUpdateLead(surveyPayload, emailPrefixId, createdDate, activeCampaign.id).catch((err) =>
       console.error("Async survey save error:", err)
     );
-
-    // Auto-send WhatsApp Step 2 Survey Completed message
-    fetch(`${SERVER_URL}/api/whatsapp/auto-send-survey`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        fullName: contactInfo.fullName,
-        email: contactInfo.email,
-        phone: contactInfo.phone.replace(/\D/g, ""),
-        campaignName: activeCampaign.id,
-      }),
-    }).catch((err) => console.error("Async WA Step 2 error:", err));
   };
 
   const handleReset = () => {

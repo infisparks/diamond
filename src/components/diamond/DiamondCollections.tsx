@@ -22,7 +22,7 @@ export const PRODUCTS_DATA: Record<string, ProductItem> = {
     id: "violet",
     title: "Royal Violet & Gold Resham Lawn Suit",
     category: "Heavy Resham • 3-Piece",
-    badge: "Original Brand",
+    badge: "Pure Cotton",
     tag: "Hot Seller",
     desc: "Deep royal violet pure lawn featuring intricate antique gold Resham threadwork on the neckline and sleeves, scalloped embroidered daman, luxury botanical printed silk dupatta, and structured violet cigarette trousers.",
     fabric: "High-Density 80x80 Pure Lawn",
@@ -114,7 +114,7 @@ export function DiamondCollections({ onSelectProduct }: DiamondCollectionsProps)
   const categories = [
     { id: "all", label: "Sabhi (6)" },
     { id: "readymade", label: "👗 Ready-Made" },
-    { id: "unstitched", label: "🧵 Original Lawn" },
+    { id: "unstitched", label: "🧵 Pure Cotton Lawn" },
     { id: "stitching", label: "✂️ Master Stitching" },
     { id: "wholesale", label: "📦 Wholesale Lots" },
   ];
@@ -133,7 +133,7 @@ export function DiamondCollections({ onSelectProduct }: DiamondCollectionsProps)
             2026 LATEST DESIGNER ARRIVALS
           </span>
           <h2 className="font-serif text-xl sm:text-3xl md:text-4xl font-bold text-slate-900 mt-2">
-            Original Branded Pakistani Suits &amp; Stitching
+            Pakistani Style Indian Pure Cotton Suits &amp; Stitching
           </h2>
           <p className="text-slate-600 text-xs sm:text-sm md:text-base mt-1.5">
             Dress par click karein aur full look, fabric details aur master fitting options dekhein.

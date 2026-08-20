@@ -15,7 +15,7 @@ export function DiamondFooter() {
             <span className="tracking-wide text-white">DIAMOND BOUTIQUE</span>
           </div>
           <p className="text-slate-300 text-xs leading-relaxed">
-            Siddiqui Coutures — Mumbai&apos;s premier hub for 100% original Pakistani suits, luxury unstitched lawn, in-house master tailoring, and pan-India B2B wholesale supply in Attar Gali.
+            Diamond Boutique — Mumbai&apos;s premier hub for Pakistani style Indian pure cotton suits, luxury unstitched lawn, in-house master tailoring, and pan-India B2B wholesale supply in Attar Gali.
           </p>
           <div className="flex items-center gap-3 pt-1 text-amber-400 text-sm">
             <span className="inline-flex items-center gap-1.5 text-xs text-purple-200 bg-purple-950 px-2.5 py-1 rounded-lg border border-purple-800">
@@ -60,7 +60,7 @@ export function DiamondFooter() {
           </h4>
           <ul className="space-y-2 text-slate-300 font-medium">
             <li className="flex items-center gap-1.5">
-              <i className="fa-solid fa-check text-[10px] text-purple-400"></i> 100% Original Pakistani Lawn
+              <i className="fa-solid fa-check text-[10px] text-purple-400"></i> 100% Pure Indian Cotton Lawn
             </li>
             <li className="flex items-center gap-1.5">
               <i className="fa-solid fa-check text-[10px] text-purple-400"></i> Ready-Made Partywear Outfits
@@ -94,7 +94,7 @@ export function DiamondFooter() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 border-t border-purple-900 text-center flex flex-col sm:flex-row justify-between items-center gap-2 text-[11px] text-slate-400">
-        <div>© 2026 Diamond Boutique (Siddiqui Coutures). All Rights Reserved.</div>
+        <div>© 2026 Diamond Boutique. All Rights Reserved.</div>
         <div className="text-amber-400/90 font-medium">Attar Gali, Mumbai Fashion District</div>
       </div>
     </footer>

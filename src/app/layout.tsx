@@ -8,15 +8,15 @@ const ogImageUrl = `${siteDomain}/product/royal-violet-gold-embroidered-suit.web
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteDomain),
-  title: "Diamond Boutique | 100% Original Pakistani Suits & In-House Master Tailoring Mumbai",
+  title: "Diamond Boutique | Pakistani Style Indian Pure Cotton Suits & In-House Master Tailoring Mumbai",
   description:
-    "Mumbai ki premier destination for 100% original Pakistani suits, luxury unstitched lawn, ready-made designer collections, in-house master stitching, aur B2B wholesale distributorship in Attar Gali.",
+    "Mumbai ki premier destination for Pakistani style Indian pure cotton suits, luxury unstitched lawn, ready-made designer collections, in-house master stitching, aur B2B wholesale distributorship in Attar Gali.",
   keywords:
-    "Diamond Boutique, Pakistani suits Mumbai, original Pakistani lawn, master tailor Attar Gali, Siddiqui Coutures, wholesale Pakistani suits, lawn suits Mumbai",
+    "Diamond Boutique, Pakistani style suits Mumbai, Indian pure cotton lawn, master tailor Attar Gali, wholesale Pakistani style suits, lawn suits Mumbai",
   openGraph: {
-    title: "Diamond Boutique | 100% Original Pakistani Suits & In-House Master Tailoring Mumbai",
+    title: "Diamond Boutique | Pakistani Style Indian Pure Cotton Suits & In-House Master Tailoring Mumbai",
     description:
-      "Mumbai ki premier destination for 100% original Pakistani suits, luxury unstitched lawn, in-house master stitching, aur B2B wholesale distributorship in Attar Gali.",
+      "Mumbai ki premier destination for Pakistani style Indian pure cotton suits, luxury unstitched lawn, in-house master stitching, aur B2B wholesale distributorship in Attar Gali.",
     url: siteDomain,
     siteName: "Diamond Boutique",
     images: [
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
         url: ogImageUrl,
         width: 1200,
         height: 630,
-        alt: "Diamond Boutique – 100% Original Pakistani Suits Mumbai",
+        alt: "Diamond Boutique – Pakistani Style Indian Pure Cotton Suits Mumbai",
       },
     ],
     locale: "en_US",
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Diamond Boutique | 100% Original Pakistani Suits & In-House Master Tailoring Mumbai",
+    title: "Diamond Boutique | Pakistani Style Indian Pure Cotton Suits & In-House Master Tailoring Mumbai",
     description:
-      "Mumbai ki premier destination for 100% original Pakistani suits, in-house master stitching, aur B2B wholesale distributorship in Attar Gali.",
+      "Mumbai ki premier destination for Pakistani style Indian pure cotton suits, in-house master stitching, aur B2B wholesale distributorship in Attar Gali.",
     images: [ogImageUrl],
   },
 };

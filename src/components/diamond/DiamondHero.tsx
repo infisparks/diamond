@@ -63,7 +63,7 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
                 </span>
               </div>
               <div className="text-[8.5px] sm:text-[10px] tracking-widest text-amber-200/90 font-semibold uppercase mt-0.5">
-                Siddiqui Coutures • Attar Gali, Mumbai
+                Diamond Boutique • Attar Gali, Mumbai
               </div>
             </div>
           </div>
@@ -78,12 +78,12 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
             {/* Prestige Badge */}
             <div className="inline-flex items-center justify-center lg:justify-start gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-purple-900/80 to-purple-950/80 border border-amber-400/40 text-amber-300 text-[10px] sm:text-xs font-extrabold shadow-[0_0_15px_rgba(245,158,11,0.2)] mx-auto lg:mx-0 max-w-fit backdrop-blur-md">
               <i className="fa-solid fa-crown text-amber-400 text-xs"></i>
-              <span className="tracking-wide">100% ORIGINAL PAKISTANI SUITS &amp; MASTER FITTING</span>
+              <span className="tracking-wide">PAKISTANI STYLE INDIAN PURE COTTON SUITS &amp; MASTER FITTING</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="font-serif text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.18] text-white tracking-tight">
-              Luxury Branded Pakistani Suits &amp; Master Fitting—{" "}
+              Pakistani Style Pure Cotton Suits &amp; Master Fitting—{" "}
               <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 bg-clip-text text-transparent block xs:inline">
                 Sab Ek Hi Chhat Ke Neeche!
               </span>
@@ -91,7 +91,7 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
 
             {/* Description in Relatable Hinglish */}
             <p className="text-slate-200 text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 font-normal">
-              Market mein bhatakna aur tailors ke chakkar band karo. Mumbai Attar Gali mein paayein <strong className="text-amber-300 font-semibold">100% original lawn collections</strong>, in-house master tailor fitting, aur direct wholesale supply.
+              Market mein bhatakna aur tailors ke chakkar band karo. Mumbai Attar Gali mein paayein <strong className="text-amber-300 font-semibold">Pakistani style Indian pure cotton lawn collections</strong>, in-house master tailor fitting, aur direct wholesale supply.
             </p>
 
             {/* Mobile-Only Clean Showcase Thumbnail Card */}
@@ -113,7 +113,7 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
                       <i className="fa-solid fa-play text-amber-400 text-[9px]"></i> Watch Video
                     </span>
                     <span className="bg-purple-950/80 backdrop-blur-md text-purple-200 text-[9.5px] font-bold px-2.5 py-0.5 rounded-full border border-purple-400/40 shadow">
-                      100% Original Lawn
+                      Pure Cotton Lawn
                     </span>
                   </div>
 
@@ -141,8 +141,8 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
             <div className="grid grid-cols-3 gap-2 sm:gap-3 py-1 max-w-lg mx-auto lg:mx-0 text-left">
               <div className="p-2 sm:p-2.5 rounded-xl bg-purple-950/70 border border-purple-500/30 text-center backdrop-blur-sm hover:border-amber-400/50 transition-colors">
                 <i className="fa-solid fa-certificate text-amber-400 text-xs sm:text-sm mb-0.5 block"></i>
-                <div className="text-[10px] sm:text-xs font-bold text-white leading-tight">100% Original</div>
-                <div className="text-[8px] sm:text-[9px] text-purple-200">Direct Brand Source</div>
+                <div className="text-[10px] sm:text-xs font-bold text-white leading-tight">Indian Pure Cotton</div>
+                <div className="text-[8px] sm:text-[9px] text-purple-200">Direct Wholesaler</div>
               </div>
               <div className="p-2 sm:p-2.5 rounded-xl bg-purple-950/70 border border-purple-500/30 text-center backdrop-blur-sm hover:border-amber-400/50 transition-colors">
                 <i className="fa-solid fa-scissors text-purple-300 text-xs sm:text-sm mb-0.5 block"></i>
@@ -160,31 +160,26 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
             <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-2.5 pt-1">
               <button
                 type="button"
-                onClick={() => onBookClick("Hero Distributorship Application")}
-                className="w-full xs:w-auto bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-black px-6 py-3 sm:py-3.5 rounded-xl shadow-[0_4px_25px_rgba(245,158,11,0.5)] hover:brightness-110 active:scale-95 transition-all text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+                onClick={() => onBookClick("Hero Consultation CTA")}
+                className="w-full xs:w-auto bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-extrabold px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl text-xs sm:text-sm shadow-[0_0_25px_rgba(245,158,11,0.45)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <i className="fa-solid fa-handshake text-slate-950 text-sm"></i> BECOME A PARTNER / DISTRIBUTOR
+                <i className="fa-solid fa-calendar-check text-sm"></i>
+                <span>Book VIP Store Consultation</span>
               </button>
-              <button
-                type="button"
-                onClick={onExploreClick}
-                className="w-full xs:w-auto bg-purple-950/80 hover:bg-purple-900 active:scale-95 text-purple-200 hover:text-white font-bold px-5 py-3 sm:py-3.5 rounded-xl shadow-md border border-purple-400/50 hover:border-amber-400 transition-all text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer backdrop-blur-sm"
+
+              <a
+                href="#wholesale"
+                className="w-full xs:w-auto bg-purple-900/60 hover:bg-purple-800 border border-purple-400/40 text-purple-200 hover:text-white font-bold px-4 py-3 sm:px-5 sm:py-3.5 rounded-xl text-xs sm:text-sm transition-all flex items-center justify-center gap-2"
               >
-                <i className="fa-solid fa-bag-shopping text-sm text-amber-400"></i> Explore Catalogue
-              </button>
+                <i className="fa-solid fa-store text-amber-400 text-xs"></i>
+                <span>B2B Reseller Portal</span>
+              </a>
             </div>
 
-            {/* Live Store Timings Pill */}
-            <div className="text-[10.5px] sm:text-xs text-slate-300 flex items-center justify-center lg:justify-start gap-2 pt-0.5">
-              <span>
-                <i className="fa-solid fa-location-dot text-amber-400 mr-1"></i> Attar Gali, Mumbai
-              </span>
-              <span>•</span>
-              <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                Khula Hai: 11 AM – 9:30 PM
-              </span>
-            </div>
+            {/* Micro Sub-copy Trust Note */}
+            <p className="text-[10.5px] sm:text-[11px] text-purple-300/80 italic text-center lg:text-left">
+              ⭐ 4.9 Rating (10,000+ Happy Customers) • Attar Gali, Mumbai Ki Mashhoor Dukan
+            </p>
 
           </div>
 
@@ -207,7 +202,7 @@ export function DiamondHero({ onBookClick, onExploreClick }: DiamondHeroProps) {
                     <i className="fa-solid fa-play text-amber-400 text-[9px]"></i> Watch Video
                   </span>
                   <span className="bg-purple-950/80 backdrop-blur-md text-purple-200 text-[10px] font-bold px-2.5 py-1 rounded-full border border-purple-400/40 shadow">
-                    100% Original Lawn
+                    Pure Cotton Lawn
                   </span>
                 </div>
 

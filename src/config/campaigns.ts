@@ -20,7 +20,7 @@ export interface CampaignConfig {
 export const CAMPAIGNS: Record<string, CampaignConfig> = {
   selflance: {
     id: "selflance",
-    title: "Diamond Boutique • Siddiqui Coutures",
+    title: "Diamond Boutique",
     subtitle: "Quick 30-Second Requirement Assessment (Attar Gali, Mumbai)",
     questions: [
       {
@@ -29,7 +29,7 @@ export const CAMPAIGNS: Record<string, CampaignConfig> = {
         field: "requirementType",
         options: [
           { label: "B2B Wholesale / Reseller Bulk Lots (10+ Suits)", key: "A" },
-          { label: "Personal Luxury Ready-Made Pakistani Suits (Retail)", key: "B" },
+          { label: "Personal Luxury Ready-Made Pakistani Style Suits (Retail)", key: "B" },
           { label: "Unstitched Pakistani Style Pure Cotton Lawn + In-House Custom Stitching", key: "C" },
           { label: "VIP Store Visit & Fitting Consultation in Attar Gali", key: "D" },
         ],
@@ -72,7 +72,7 @@ export const CAMPAIGNS: Record<string, CampaignConfig> = {
   },
   diamond: {
     id: "diamond",
-    title: "Diamond Boutique • Siddiqui Coutures",
+    title: "Diamond Boutique",
     subtitle: "Quick 30-Second Requirement Assessment (Attar Gali, Mumbai)",
     questions: [
       {
@@ -81,7 +81,7 @@ export const CAMPAIGNS: Record<string, CampaignConfig> = {
         field: "requirementType",
         options: [
           { label: "B2B Wholesale / Reseller Bulk Lots (10+ Suits)", key: "A" },
-          { label: "Personal Luxury Ready-Made Pakistani Suits (Retail)", key: "B" },
+          { label: "Personal Luxury Ready-Made Pakistani Style Suits (Retail)", key: "B" },
           { label: "Unstitched Pakistani Style Pure Cotton Lawn + In-House Custom Stitching", key: "C" },
           { label: "VIP Store Visit & Fitting Consultation in Attar Gali", key: "D" },
         ],
@@ -124,7 +124,7 @@ export const CAMPAIGNS: Record<string, CampaignConfig> = {
   },
   firstoptionagency: {
     id: "firstoptionagency",
-    title: "Diamond Boutique • Siddiqui Coutures",
+    title: "Diamond Boutique",
     subtitle: "Quick 30-Second Requirement Assessment",
     questions: [
       {
@@ -133,7 +133,7 @@ export const CAMPAIGNS: Record<string, CampaignConfig> = {
         field: "requirementType",
         options: [
           { label: "B2B Wholesale / Reseller Bulk Lots (10+ Suits)", key: "A" },
-          { label: "Personal Luxury Ready-Made Pakistani Suits (Retail)", key: "B" },
+          { label: "Personal Luxury Ready-Made Pakistani Style Suits (Retail)", key: "B" },
           { label: "Unstitched Pakistani Style Pure Cotton Lawn + In-House Custom Stitching", key: "C" },
           { label: "VIP Store Visit & Fitting Consultation in Attar Gali", key: "D" },
         ],
@@ -175,7 +175,7 @@ export const CAMPAIGNS: Record<string, CampaignConfig> = {
   },
   doctors_growth: {
     id: "doctors_growth",
-    title: "Diamond Boutique • Siddiqui Coutures",
+    title: "Diamond Boutique",
     subtitle: "Tailor Your Order or Visit Request",
     questions: [
       {

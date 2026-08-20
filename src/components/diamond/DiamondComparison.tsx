@@ -65,7 +65,7 @@ export function DiamondComparison() {
               <li className="flex items-start gap-2">
                 <i className="fa-solid fa-check text-amber-400 mt-1"></i>
                 <span>
-                  <strong>100% Original Pakistani Brands:</strong> Pure luxury lawn, real silk dupattas aur authentic embroidery direct brand sources se.
+                  <strong>Pakistani Style Indian Pure Cotton:</strong> Pure luxury breathable lawn, real silk dupattas aur authentic fine embroidery direct manufacturing hub se.
                 </span>
               </li>
               <li className="flex items-start gap-2">

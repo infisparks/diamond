@@ -96,8 +96,8 @@ export default function WhatsappManagerPage() {
     defaultMeetingUrl: "https://meet.google.com/firstoption-strategy-call",
     step1Welcome: {
       isEnabled: true,
-      template: `🌸 *DIAMOND BOUTIQUE • Siddiqui Coutures* 🌸
-_Luxury Pakistani Suits & Wholesale Hub_
+      template: `🌸 *DIAMOND BOUTIQUE* 🌸
+_Pakistani Style Indian Pure Cotton Suits & Wholesale Hub_
 
 Assalam-o-Alaikum & Welcome *{{name}}*! ✨
 
@@ -134,7 +134,7 @@ Your preferences have been shared with our styling team. We are preparing tailor
       isEnabled: true,
       sendWithCard: true,
       template: `🎉 *APPOINTMENT CONFIRMED!* 🎉
-*DIAMOND BOUTIQUE • Siddiqui Coutures*
+*DIAMOND BOUTIQUE*
 
 Dear *{{name}}*,
 

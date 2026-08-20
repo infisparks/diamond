@@ -34,7 +34,7 @@ export function DiamondQuickViewModal({
         <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-3.5 border-b border-slate-100 bg-white sticky top-0 z-20">
           <div className="flex items-center gap-2">
             <span className="bg-purple-100 text-purple-900 font-extrabold text-[9.5px] sm:text-[10.5px] px-2.5 py-0.5 rounded-full uppercase border border-purple-200">
-              100% Original Brand
+              Indian Pure Cotton
             </span>
             <span className="text-[10px] text-green-700 font-bold hidden xs:inline">
               <i className="fa-solid fa-circle-check mr-1"></i> In-Stock Attar Gali

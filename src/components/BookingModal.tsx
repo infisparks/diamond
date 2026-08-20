@@ -973,7 +973,7 @@ export function BookingModal({
                       <h4 className="text-xs sm:text-base font-bold text-white leading-tight font-serif">
                         Diamond Boutique Store Consultation
                       </h4>
-                      <p className="text-[11px] text-amber-300 font-semibold">Siddiqui Coutures • Attar Gali</p>
+                      <p className="text-[11px] text-amber-300 font-semibold">Diamond Boutique • Attar Gali</p>
                     </div>
                   </div>
 

@@ -41,7 +41,7 @@ export function DiamondProcess() {
             Shopping &amp; Custom Stitching Kaise Kaam Karta Hai?
           </h2>
           <p className="text-slate-600 text-xs sm:text-sm md:text-base mt-1.5">
-            Original suit select karne se lekar perfect fitting tak bas 4 aasan steps.
+            Pakistani style pure cotton suit select karne se lekar perfect fitting tak bas 4 aasan steps.
           </p>
         </div>
 

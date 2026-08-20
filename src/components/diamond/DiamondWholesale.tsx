@@ -33,12 +33,12 @@ export function DiamondWholesale({ onBookClick }: DiamondWholesaleProps) {
             <h2 className="font-serif text-xl sm:text-3xl md:text-4xl font-bold leading-tight">
               Apne Boutique Ya Online Business Ko Badhaiye{" "}
               <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 bg-clip-text text-transparent">
-                Original Pakistani Suits Ke Saath
+                Pakistani Style Pure Cotton Suits Ke Saath
               </span>
             </h2>
 
             <p className="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed">
-              Kya aap boutique owner hain, ghar se resell karte hain, ya retail shop chalate hain? Diamond Boutique aapko dega authentic Pakistani inventory, sabse saste bulk rate tiers, aur fastest Pan-India dispatch.
+              Kya aap boutique owner hain, ghar se resell karte hain, ya retail shop chalate hain? Diamond Boutique aapko dega premium Pakistani style Indian pure cotton inventory, sabse saste bulk rate tiers, aur fastest Pan-India dispatch.
             </p>
 
             <div className="space-y-2.5 text-xs sm:text-sm text-slate-200">

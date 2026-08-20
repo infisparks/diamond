@@ -24,7 +24,7 @@ export function DiamondHeader({ onBookClick }: DiamondHeaderProps) {
                 </span>
               </div>
               <div className="text-[8px] sm:text-[9.5px] tracking-wider text-purple-300 font-semibold uppercase -mt-0.5">
-                Siddiqui Coutures • Attar Gali, Mumbai
+                Diamond Boutique • Attar Gali, Mumbai
               </div>
             </div>
           </div>

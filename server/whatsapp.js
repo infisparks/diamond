@@ -631,8 +631,8 @@ async function getWorkflowConfig(campaignName = "firstoptionagency") {
 }
 
 const DEFAULT_TEMPLATES = {
-  step1: `🌸 *DIAMOND BOUTIQUE • Siddiqui Coutures* 🌸
-_Luxury Pakistani Suits & Wholesale Hub_
+  step1: `🌸 *DIAMOND BOUTIQUE* 🌸
+_Pakistani Style Indian Pure Cotton Suits & Wholesale Hub_
 
 Assalam-o-Alaikum & Welcome *{{name}}*! ✨
 
@@ -664,7 +664,7 @@ Your preferences have been shared with our styling team. We are preparing tailor
 📍 *Diamond Boutique • Attar Gali, Mumbai*`,
 
   step3: `🎉 *APPOINTMENT CONFIRMED!* 🎉
-*DIAMOND BOUTIQUE • Siddiqui Coutures*
+*DIAMOND BOUTIQUE*
 
 Dear *{{name}}*,
 

@@ -7,12 +7,12 @@ export function DiamondFAQ() {
 
   const faqs = [
     {
-      q: "1. Kya aapke paas 100% original branded Pakistani suits milte hain?",
-      a: "Haan bilkul 100% genuine! Hum official distributors aur direct brand networks se stock laate hain. Har lawn, silk dupatta aur embroidery patch authentic aur heavy density fabric ka hota hai. Zero duplicate guarantee.",
+      q: "1. Kya aapke paas Pakistani style Indian pure cotton suits milte hain?",
+      a: "Haan bilkul! Hum Pakistani style designs mein 100% pure Indian breathable cotton aur premium lawn fabric provide karte hain. Har lawn, silk dupatta aur embroidery patch fine quality heavy density fabric ka hota hai. Premium quality guarantee.",
     },
     {
       q: "2. Kya main dukan pe hi custom stitching karwa sakti hoon?",
-      a: "Haan! Siddiqui Coutures ke in-house master tailors dukan pe hi available hote hain. Aap unstitched suit select karein aur turant neck design, lace attachment, inner lining aur perfect fitting ke liye naap de sakte hain.",
+      a: "Haan! Diamond Boutique ke in-house master tailors dukan pe hi available hote hain. Aap unstitched suit select karein aur turant neck design, lace attachment, inner lining aur perfect fitting ke liye naap de sakte hain.",
     },
     {
       q: "3. Resellers aur shops ke liye wholesale order kaise hota hai?",

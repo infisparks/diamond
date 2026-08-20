@@ -9,7 +9,7 @@ interface DiamondLocationProps {
 
 export function DiamondLocation({ onBookClick, onShowToast }: DiamondLocationProps) {
   const storeAddress =
-    "Diamond Boutique / Siddiqui Coutures, 54/56, Shop No. 2, Khatija Bai Building, Kambekar Street, Attar Gali, Mumbai – 400003";
+    "Diamond Boutique, 54/56, Shop No. 2, Khatija Bai Building, Kambekar Street, Attar Gali, Mumbai – 400003";
 
   const handleCopyAddress = () => {
     if (navigator.clipboard) {
@@ -47,7 +47,7 @@ export function DiamondLocation({ onBookClick, onShowToast }: DiamondLocationPro
               </div>
               <div>
                 <h3 className="font-serif font-bold text-base sm:text-xl text-slate-900">
-                  Diamond Boutique / Siddiqui Coutures
+                  Diamond Boutique
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
                   54/56, Shop No. 2, Ground Floor, Khatija Bai Building,<br />

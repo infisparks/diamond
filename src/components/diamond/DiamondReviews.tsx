@@ -9,7 +9,7 @@ export function DiamondReviews() {
       name: "Ayesha Khan",
       location: "Retail Shopper • Bandra, Mumbai",
       avatarBg: "bg-purple-900 text-amber-300",
-      text: '"Pehle Crawford Market se suit leke Bandra ke tailors ke chakkar kaatne padte the. Diamond Boutique ne sab solve kar diya! Fabric 100% original lawn hai aur master tailor ne pehle trial me hi perfect fitting bana di."',
+      text: '"Pehle Crawford Market se suit leke Bandra ke tailors ke chakkar kaatne padte the. Diamond Boutique ne sab solve kar diya! Fabric 100% pure cotton lawn hai aur master tailor ne pehle trial me hi perfect fitting bana di."',
     },
     {
       initials: "RS",
@@ -23,7 +23,7 @@ export function DiamondReviews() {
       name: "Fatima Ansari",
       location: "Festive Shopper • South Mumbai",
       avatarBg: "bg-purple-950 text-amber-400",
-      text: '"Mumbai ki garmi aur humidity me aisa breathable lawn milna bohot mushkil hota hai jo colour na chhodhe. Inke original suits ka fall aur look bilkul royal aata hai. Eid aur weddings ke liye best choice hai."',
+      text: '"Mumbai ki garmi aur humidity me aisa breathable Indian pure cotton lawn milna bohot mushkil hota hai jo colour na chhodhe. Inke Pakistani style suits ka fall aur look bilkul royal aata hai. Eid aur weddings ke liye best choice hai."',
     },
   ];
 
@@ -38,7 +38,7 @@ export function DiamondReviews() {
             Shoppers Aur Resellers Ka Bharosa
           </h2>
           <p className="text-slate-600 text-xs sm:text-sm md:text-base mt-1.5">
-            Kyun log Diamond Boutique aur Siddiqui Coutures ko 4.9 rating dete hain?
+            Kyun log Diamond Boutique ko 4.9 rating dete hain?
           </p>
         </div>
 

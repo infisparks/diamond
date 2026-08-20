@@ -28,9 +28,9 @@ export function DiamondTrustMetrics() {
           {/* Stat 3 */}
           <div className="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center hover:shadow-md transition-all">
             <div className="text-xl sm:text-3xl font-extrabold font-serif text-purple-950 mb-0.5">100%</div>
-            <div className="text-[11px] sm:text-sm font-bold text-slate-800">Original Brands</div>
+            <div className="text-[11px] sm:text-sm font-bold text-slate-800">Indian Pure Cotton</div>
             <div className="text-[9px] sm:text-[10px] text-purple-700 font-bold uppercase tracking-wider mt-0.5">
-              <i className="fa-solid fa-shield-check mr-1"></i> Guaranteed Lawn
+              <i className="fa-solid fa-shield-check mr-1"></i> Guaranteed Fabric
             </div>
           </div>
 
